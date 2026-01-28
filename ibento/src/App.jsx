@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRegistrations from "./pages/AdminRegistrations";
 import AdminEventReport from "./pages/AdminEventReport";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -18,9 +19,10 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/registrations" element={<AdminRegistrations />} />
-        <Route path="/admin/report" element={<AdminEventReport />} />
+        <Route path="/admin" element={ <ProtectedRoute allowedRole="admin"><AdminDashboard />
+        </ProtectedRoute>} />
+        <Route path="/admin/registrations" element={ <ProtectedRoute allowedRole="admin"><AdminRegistrations /></ProtectedRoute>} />
+        <Route path="/admin/report" element={ <ProtectedRoute allowedRole="admin"><AdminEventReport /></ProtectedRoute>} />
       </Routes>
     </>
   );

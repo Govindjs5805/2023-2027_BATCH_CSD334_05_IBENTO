@@ -1,27 +1,38 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+const handleRegister = async (e) => {
+  e.preventDefault();
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("USER CREATED:", userCredential.user);
-      alert("Registration successful!");
-    } catch (error) {
-      console.error("ERROR:", error);
-      alert(error.message);
-    }
-  };
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const uid = userCredential.user.uid;
+    console.log("UID:", uid);
+
+    await setDoc(doc(db, "users", uid), {
+      email: email,
+      role: "student",
+      createdAt: new Date()
+    });
+
+    alert("Registration successful!");
+  } catch (error) {
+    console.error("REGISTER ERROR:", error);
+    alert(error.message);
+  }
+};
+
 
   return (
     <div style={{ padding: "60px", maxWidth: "400px", margin: "auto" }}>
