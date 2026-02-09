@@ -18,7 +18,7 @@ function Hero() {
       </p>
 
       <div style={{ marginTop: "25px" }}>
-        <button style={{ marginRight: "10px" }}>Browse Events</button>
+        <button className="hero-buttons" style={{ marginRight: "10px" }}>Browse Events</button>
         <button>Host Event</button>
       </div>
     </section>

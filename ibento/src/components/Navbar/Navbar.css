@@ -7,9 +7,11 @@
 }
 
 .navbar-logo {
-  font-size: 22px;
-  font-weight: bold;
-  color: white;
+  font-family: fantasy;
+  letter-spacing: 2px;
+  font-size: 30px;
+  font-weight: medium;
+  color: rgb(13, 174, 61);
 }
 
 .navbar-links {
