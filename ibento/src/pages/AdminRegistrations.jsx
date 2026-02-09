@@ -8,6 +8,7 @@ import {
   doc
 } from "firebase/firestore";
 import { db } from "../firebase";
+import AdminLayout from "../components/Admin/AdminLayout";
 
 function AdminRegistrations() {
   const [events, setEvents] = useState([]);
@@ -15,17 +16,16 @@ function AdminRegistrations() {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch all events
+  // Fetch events
   useEffect(() => {
     const fetchEvents = async () => {
       const snap = await getDocs(collection(db, "events"));
-      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      setEvents(list);
+      setEvents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     };
     fetchEvents();
   }, []);
 
-  // Fetch registrations for selected event
+  // Fetch registrations by event
   const fetchRegistrations = async (eventId) => {
     setLoading(true);
     const q = query(
@@ -33,28 +33,56 @@ function AdminRegistrations() {
       where("eventId", "==", eventId)
     );
     const snap = await getDocs(q);
-    const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    setRegistrations(list);
+    setRegistrations(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     setLoading(false);
   };
 
   // Mark attendance
-  const markAttendance = async (registrationId) => {
-    const ref = doc(db, "registrations", registrationId);
-    await updateDoc(ref, {
+  const markPresent = async (id) => {
+    await updateDoc(doc(db, "registrations", id), {
       checkInStatus: true,
       checkInTime: new Date()
     });
     fetchRegistrations(selectedEventId);
   };
+  const exportAttendance = () => {
+  if (registrations.length === 0) {
+    alert("No registrations to export");
+    return;
+  }
+
+  // CSV Header
+  let csvContent = "Student Name,Email,Check-in Status,Check-in Time\n";
+
+  registrations.forEach((reg) => {
+    const name = reg.userName || "-";
+    const email = reg.userEmail;
+    const status = reg.checkInStatus ? "Present" : "Absent";
+    const time = reg.checkInTime
+      ? new Date(reg.checkInTime.seconds * 1000).toLocaleString()
+      : "—";
+
+    csvContent += `${name},${email},${status},${time}\n`;
+  });
+
+  // Create downloadable file
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "attendance_sheet.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>Admin – Event Registrations</h2>
+    <AdminLayout>
+      <h1>Event Registrations</h1>
 
-      {/* Event selector */}
       <select
-        style={{ padding: "10px", marginTop: "20px", width: "300px" }}
+        style={{ padding: "10px", marginTop: "20px" }}
         value={selectedEventId}
         onChange={(e) => {
           setSelectedEventId(e.target.value);
@@ -69,32 +97,45 @@ function AdminRegistrations() {
         ))}
       </select>
 
-      {/* Registrations list */}
-      {loading && <p>Loading registrations...</p>}
+      {loading && <p>Loading...</p>}
+        
 
       {!loading && registrations.length > 0 && (
-        <table
-          border="1"
-          cellPadding="10"
-          style={{ marginTop: "30px", width: "100%", borderCollapse: "collapse" }}
-        >
+        <>
+  <button
+    onClick={exportAttendance}
+    style={{
+      marginTop: "20px",
+      padding: "10px 15px",
+      backgroundColor: "#3ddc84",
+      border: "none",
+      cursor: "pointer",
+      fontWeight: "bold"
+    }}
+  >
+    Export Attendance
+  </button>
+
+        <table style={{ marginTop: "30px", width: "100%" }} border="1">
           <thead>
             <tr>
+              <th>Name</th>
               <th>Email</th>
               <th>Status</th>
-              <th>Check-in</th>
+              <th>Attendance</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {registrations.map(reg => (
               <tr key={reg.id}>
+                <td>{reg.userName}</td>
                 <td>{reg.userEmail}</td>
                 <td>{reg.status}</td>
-                <td>{reg.checkInStatus ? "Present" : "Not Checked-in"}</td>
+                <td>{reg.checkInStatus ? "Present" : "Absent"}</td>
                 <td>
                   {!reg.checkInStatus && (
-                    <button onClick={() => markAttendance(reg.id)}>
+                    <button onClick={() => markPresent(reg.id)}>
                       Mark Present
                     </button>
                   )}
@@ -103,12 +144,13 @@ function AdminRegistrations() {
             ))}
           </tbody>
         </table>
+        </>
       )}
 
       {!loading && selectedEventId && registrations.length === 0 && (
-        <p style={{ marginTop: "20px" }}>No registrations for this event.</p>
+        <p>No registrations found.</p>
       )}
-    </div>
+    </AdminLayout>
   );
 }
 

@@ -8,6 +8,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminRegistrations from "./pages/AdminRegistrations";
 import AdminEventReport from "./pages/AdminEventReport";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminCreateEvent from "./pages/AdminCreateEvent";
+import StudentDashboard from "./pages/StudentDashboard";
+import EditProfile from "./pages/EditProfile";
+import AdminAttendanceAnalytics from "./pages/AdminAttendanceAnalytics";
 
 function App() {
   return (
@@ -23,6 +27,10 @@ function App() {
         </ProtectedRoute>} />
         <Route path="/admin/registrations" element={ <ProtectedRoute allowedRole="admin"><AdminRegistrations /></ProtectedRoute>} />
         <Route path="/admin/report" element={ <ProtectedRoute allowedRole="admin"><AdminEventReport /></ProtectedRoute>} />
+        <Route path="/admin/create-event" element={ <ProtectedRoute allowedRole="admin"><AdminCreateEvent /></ProtectedRoute>} />
+        <Route path="/my-events" element={ <ProtectedRoute allowedRole="student"><StudentDashboard /></ProtectedRoute>} />
+        <Route path="/edit-profile" element={ <ProtectedRoute allowedRole="student"><EditProfile /></ProtectedRoute>} />
+        <Route path="/admin/analytics" element={ <ProtectedRoute allowedRole="admin"><AdminAttendanceAnalytics /></ProtectedRoute>} />
       </Routes>
     </>
   );

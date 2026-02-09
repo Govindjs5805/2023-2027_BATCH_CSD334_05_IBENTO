@@ -8,7 +8,7 @@ function Events() {
   const [loading, setLoading] = useState(true);
   const [registeringId, setRegisteringId] = useState(null);
 
-  const { user } = useAuth();
+  const {user, fullName} = useAuth();
 
   // 🔹 Fetch events from Firestore
   useEffect(() => {
@@ -61,6 +61,7 @@ function Events() {
         eventDate: event.date,
         userId: user.uid,
         userEmail: user.email,
+        userName : fullName,
         userRole: "student",
         status: "registered",
         registeredAt: new Date(),

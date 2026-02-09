@@ -6,6 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const [fullName,setFullName] = useState(null);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ export function AuthProvider({ children }) {
         const snap = await getDoc(doc(db, "users", currentUser.uid));
         if (snap.exists()) {
           setRole(snap.data().role);
+          setFullName(snap.data().fullName);
         }
       } else {
         setUser(null);
@@ -31,7 +33,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, role }}>
+    <AuthContext.Provider value={{ user, role, fullName }}>
       {!loading && children}
     </AuthContext.Provider>
   );

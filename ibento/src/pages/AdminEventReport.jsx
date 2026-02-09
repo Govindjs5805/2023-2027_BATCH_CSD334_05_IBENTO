@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  collection,
-  getDocs,
-  query,
-  where
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
+import AdminLayout from "../components/Admin/AdminLayout";
 
 function AdminEventReport() {
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [registrations, setRegistrations] = useState([]);
   const [report, setReport] = useState("");
 
-  // Fetch events
   useEffect(() => {
     const fetchEvents = async () => {
       const snap = await getDocs(collection(db, "events"));
@@ -22,10 +15,7 @@ function AdminEventReport() {
     fetchEvents();
   }, []);
 
-  // Generate report
   const generateReport = async (event) => {
-    setSelectedEvent(event);
-
     const q = query(
       collection(db, "registrations"),
       where("eventId", "==", event.id)
@@ -33,7 +23,6 @@ function AdminEventReport() {
 
     const snap = await getDocs(q);
     const regs = snap.docs.map(d => d.data());
-    setRegistrations(regs);
 
     const total = regs.length;
     const present = regs.filter(r => r.checkInStatus).length;
@@ -42,25 +31,27 @@ function AdminEventReport() {
     const summary = `
 Event Report: ${event.title}
 
+Date: ${event.date}
+Venue: ${event.venue}
+
 Total Registrations: ${total}
 Students Attended: ${present}
 Students Absent: ${absent}
 
 Summary:
-The event "${event.title}" was successfully conducted on ${event.date} at ${event.venue}. 
-Out of ${total} registered participants, ${present} students actively attended the event.
-The overall participation and engagement were satisfactory, making the event a success.
+The event "${event.title}" was successfully conducted with active student participation.
+Attendance statistics indicate a healthy engagement level, making the event a success.
 `;
 
     setReport(summary);
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>Admin – Event Report Generation</h2>
+    <AdminLayout>
+      <h1>Event Report Generation</h1>
 
       <select
-        style={{ padding: "10px", marginTop: "20px", width: "300px" }}
+        style={{ padding: "10px", marginTop: "20px" }}
         onChange={(e) => {
           const ev = events.find(x => x.id === e.target.value);
           if (ev) generateReport(ev);
@@ -87,7 +78,7 @@ The overall participation and engagement were satisfactory, making the event a s
           <p>{report}</p>
         </div>
       )}
-    </div>
+    </AdminLayout>
   );
 }
 

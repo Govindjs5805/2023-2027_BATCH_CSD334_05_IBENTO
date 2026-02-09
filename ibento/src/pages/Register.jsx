@@ -4,6 +4,7 @@ import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 function Register() {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,6 +22,7 @@ const handleRegister = async (e) => {
     console.log("UID:", uid);
 
     await setDoc(doc(db, "users", uid), {
+      fullName: fullName,
       email: email,
       role: "student",
       createdAt: new Date()
@@ -39,6 +41,14 @@ const handleRegister = async (e) => {
       <h2>Register</h2>
 
       <form onSubmit={handleRegister}>
+        <input
+          type = "text"
+          placeholder="Full Name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          required
+
+        />
         <input
           type="email"
           placeholder="Email"
