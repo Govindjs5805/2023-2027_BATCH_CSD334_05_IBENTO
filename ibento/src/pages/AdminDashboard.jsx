@@ -1,97 +1,93 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
+import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../components/Admin/AdminLayout";
-import { Link } from "react-router-dom";
 
 function AdminDashboard() {
-  const [eventCount, setEventCount] = useState(0);
-  const [registrationCount, setRegistrationCount] = useState(0);
+  const { role, clubId } = useAuth();
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      const eventsSnap = await getDocs(collection(db, "events"));
-      const regsSnap = await getDocs(collection(db, "registrations"));
+    const fetchEvents = async () => {
+      try {
+        let eventsRef = collection(db, "events");
 
-      setEventCount(eventsSnap.size);
-      setRegistrationCount(regsSnap.size);
+        let q;
+
+        if (role === "clubLead") {
+          // 🔥 Only this club's events
+          q = query(eventsRef, where("clubId", "==", clubId));
+        } else if (role === "superAdmin") {
+          // 🔥 All events
+          q = eventsRef;
+        } else {
+          return;
+        }
+
+        const snapshot = await getDocs(q);
+
+        const eventList = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setEvents(eventList);
+
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    fetchStats();
-  }, []);
+    fetchEvents();
+  }, [role, clubId]);
+
+  // ❌ Block students
+  if (role !== "clubLead" && role !== "superAdmin") {
+    return (
+      <AdminLayout>
+        <h2 className="text-red-600 text-xl">
+          Access Denied
+        </h2>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Admin Dashboard
-        </h1>
-        <p className="text-gray-500">
-          Overview of campus event management system
-        </p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <div className="bg-white rounded-xl shadow p-6">
-          <p className="text-gray-500">Total Events</p>
-          <h2 className="text-4xl font-bold text-primary mt-2">
-            {eventCount}
-          </h2>
-        </div>
-
-        <div className="bg-white rounded-xl shadow p-6">
-          <p className="text-gray-500">Total Registrations</p>
-          <h2 className="text-4xl font-bold text-primary mt-2">
-            {registrationCount}
-          </h2>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">
-          Quick Actions
-        </h2>
+        <h1 className="text-2xl font-bold mb-6">
+          {role === "superAdmin" ? "All Events" : "My Club Events"}
+        </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link
-            to="/admin/create-event"
-            className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition"
-          >
-            <h3 className="text-lg font-semibold text-primary">
-              Create Event
-            </h3>
-            <p className="text-gray-500 mt-2">
-              Add a new campus event
-            </p>
-          </Link>
+        {events.length === 0 ? (
+          <p>No events found.</p>
+        ) : (
+          <div className="space-y-4">
+            {events.map(event => (
+              <div
+                key={event.id}
+                className="p-4 border rounded shadow-sm bg-white"
+              >
+                <h2 className="text-lg font-semibold">
+                  {event.title}
+                </h2>
 
-          <Link
-            to="/admin/registrations"
-            className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition"
-          >
-            <h3 className="text-lg font-semibold text-primary">
-              View Registrations
-            </h3>
-            <p className="text-gray-500 mt-2">
-              Manage student attendance
-            </p>
-          </Link>
+                <p className="text-gray-600">
+                  {event.date} | {event.venue}
+                </p>
 
-          <Link
-            to="/admin/analytics"
-            className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition"
-          >
-            <h3 className="text-lg font-semibold text-primary">
-              Attendance Analytics
-            </h3>
-            <p className="text-gray-500 mt-2">
-              Visual attendance insights
-            </p>
-          </Link>
-        </div>
+                <p className="text-sm text-gray-500">
+                  Club: {event.clubId}
+                </p>
+
+                <p className="mt-2 text-gray-700">
+                  {event.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

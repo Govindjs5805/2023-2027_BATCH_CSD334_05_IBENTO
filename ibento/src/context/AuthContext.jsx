@@ -1,39 +1,62 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [fullName,setFullName] = useState(null);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [clubId, setClubId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
 
-        // 🔑 Fetch role from Firestore
-        const snap = await getDoc(doc(db, "users", currentUser.uid));
-        if (snap.exists()) {
-          setRole(snap.data().role);
-          setFullName(snap.data().fullName);
+        try {
+          const userDocRef = doc(db, "users", firebaseUser.uid);
+          const userSnap = await getDoc(userDocRef);
+
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+
+            setRole(userData.role || "student");
+            setClubId(userData.clubId || null);
+          } else {
+            // If user exists in Auth but not in Firestore
+            setRole("student");
+            setClubId(null);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setRole(null);
+          setClubId(null);
         }
+
       } else {
         setUser(null);
         setRole(null);
+        setClubId(null);
       }
+
       setLoading(false);
     });
 
-    return () => unsub();
+    return () => unsubscribe();
   }, []);
 
+  const value = {
+    user,
+    role,
+    clubId,
+    loading
+  };
+
   return (
-    <AuthContext.Provider value={{ user, role, fullName }}>
+    <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>
   );

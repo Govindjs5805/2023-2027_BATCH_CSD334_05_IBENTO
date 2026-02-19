@@ -27,7 +27,7 @@ function App() {
         </ProtectedRoute>} />
         <Route path="/admin/registrations" element={ <ProtectedRoute allowedRole="admin"><AdminRegistrations /></ProtectedRoute>} />
         <Route path="/admin/report" element={ <ProtectedRoute allowedRole="admin"><AdminEventReport /></ProtectedRoute>} />
-        <Route path="/admin/create-event" element={ <ProtectedRoute allowedRole="admin"><AdminCreateEvent /></ProtectedRoute>} />
+        <Route path="/admin/create-event" element={ <ProtectedRoute allowedRole="clubLead"><AdminCreateEvent /></ProtectedRoute>} />
         <Route path="/my-events" element={ <ProtectedRoute allowedRole="student"><StudentDashboard /></ProtectedRoute>} />
         <Route path="/edit-profile" element={ <ProtectedRoute allowedRole="student"><EditProfile /></ProtectedRoute>} />
         <Route path="/admin/analytics" element={ <ProtectedRoute allowedRole="admin"><AdminAttendanceAnalytics /></ProtectedRoute>} />

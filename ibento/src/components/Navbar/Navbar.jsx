@@ -15,13 +15,14 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* Logo */}
       <div className="navbar-logo">
-        IBENTO
+        <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+          IBENTO
+        </Link>
       </div>
 
-      {/* Navigation Links */}
       <ul className="navbar-links">
+
         {/* GUEST */}
         {!user && (
           <>
@@ -38,30 +39,33 @@ function Navbar() {
             <li><Link to="/">Home</Link></li>
             <li><Link to="/events">Events</Link></li>
             <li><Link to="/my-events">My Events</Link></li>
-            <li><Link to="/edit-profile">Profile</Link></li>
           </>
         )}
 
-        {/* ADMIN */}
-        {user && role === "admin" && (
+        {/* CLUB LEAD */}
+        {user && role === "clubLead" && (
           <>
-            <li>
-              <Link to="/admin">Dashboard</Link>
-            </li>
+            <li><Link to="/admin">Dashboard</Link></li>
+            <li><Link to="/admin/create-event">Create Event</Link></li>
+          </>
+        )}
+
+        {/* SUPER ADMIN */}
+        {user && role === "superAdmin" && (
+          <>
+            <li><Link to="/admin">All Events</Link></li>
           </>
         )}
 
         {/* LOGOUT */}
         {user && (
           <li>
-            <button
-              className="logout-btn"
-              onClick={handleLogout}
-            >
+            <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
           </li>
         )}
+
       </ul>
     </nav>
   );
