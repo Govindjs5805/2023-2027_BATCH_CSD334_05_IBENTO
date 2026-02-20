@@ -12,6 +12,7 @@ import AdminCreateEvent from "./pages/AdminCreateEvent";
 import StudentDashboard from "./pages/StudentDashboard";
 import EditProfile from "./pages/EditProfile";
 import AdminAttendanceAnalytics from "./pages/AdminAttendanceAnalytics";
+import MyEvents from "./pages/MyEvents";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/my-events" element={ <ProtectedRoute allowedRole="student"><StudentDashboard /></ProtectedRoute>} />
         <Route path="/edit-profile" element={ <ProtectedRoute allowedRole="student"><EditProfile /></ProtectedRoute>} />
         <Route path="/admin/analytics" element={ <ProtectedRoute allowedRole="admin"><AdminAttendanceAnalytics /></ProtectedRoute>} />
+        <Route path="/my-events" element={<MyEvents />} />
       </Routes>
     </>
   );
