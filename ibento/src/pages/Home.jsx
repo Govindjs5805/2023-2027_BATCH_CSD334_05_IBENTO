@@ -26,12 +26,23 @@ function Home() {
     <div className="home">
 
       <section className="hero">
-        <h1>Experience Campus Events Like Never Before</h1>
-        <p>Discover. Register. Attend. Track.</p>
-        <button onClick={() => navigate("/events")}>
-          Explore Events
-        </button>
-      </section>
+  <div className="hero-content">
+    <h1>Powering Campus Events</h1>
+    <p>
+      A centralized platform for discovering, organizing, 
+      and tracking campus activities.
+    </p>
+
+    <div className="hero-buttons">
+      <button onClick={() => navigate("/events")}>
+        Explore Events
+      </button>
+      <button className="secondary">
+        Learn More
+      </button>
+    </div>
+  </div>
+</section>
 
       <section className="preview" data-aos="fade-up">
         <h2>Upcoming Events</h2>
@@ -44,6 +55,21 @@ function Home() {
           ))}
         </div>
       </section>
+      <section className="organizers">
+  <h2>Our Organizers</h2>
+  <div className="organizer-grid">
+    <div className="org-card">Tech Club</div>
+    <div className="org-card">Media Forum</div>
+    <div className="org-card">Arts Association</div>
+    <div className="org-card">Sports Council</div>
+  </div>
+</section>
+<section className="cta">
+  <h2>Ready to join the next big event?</h2>
+  <button onClick={() => navigate("/events")}>
+    View All Events
+  </button>
+</section>
 
     </div>
   );

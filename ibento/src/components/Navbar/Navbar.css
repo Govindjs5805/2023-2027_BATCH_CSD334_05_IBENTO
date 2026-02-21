@@ -1,73 +1,53 @@
-/* ===== NAVBAR CONTAINER ===== */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
-  padding: 15px 40px;
+  height: 70px;
+  padding: 0 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255,255,255,0.7);
   z-index: 1000;
 }
 
-/* ===== LOGO ===== */
-.nav-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  letter-spacing: 2px;
+body.dark .navbar {
+  background: rgba(18,18,18,0.8);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ===== LINKS CONTAINER ===== */
+.nav-logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
 .nav-links {
   display: flex;
+  gap: 25px;
   align-items: center;
-  gap: 20px;
 }
 
-/* ===== NAV LINKS ===== */
 .nav-links a {
   text-decoration: none;
   color: inherit;
   font-weight: 500;
-  position: relative;
-  transition: 0.3s ease;
+  transition: 0.3s;
 }
 
-/* Active Link */
 .nav-links a.active {
-  font-weight: bold;
   color: #198754;
+  font-weight: 600;
 }
 
-/* Hover Effect */
-.nav-links a::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #198754;
-  transition: width 0.3s ease;
-}
-
-.nav-links a:hover::after {
-  width: 100%;
-}
-
-/* ===== BUTTONS ===== */
 .logout-btn,
 .theme-toggle {
-  padding: 6px 12px;
-  border: none;
+  padding: 6px 14px;
   border-radius: 6px;
+  border: none;
   cursor: pointer;
-  font-weight: 500;
-  transition: 0.3s ease;
 }
 
 .logout-btn {
@@ -75,29 +55,7 @@
   color: white;
 }
 
-.logout-btn:hover {
-  background: #bb2d3b;
-}
-
 .theme-toggle {
   background: #198754;
   color: white;
-}
-
-.theme-toggle:hover {
-  background: #146c43;
-}
-
-/* ===== DARK MODE ===== */
-body.dark {
-  background: #121212;
-  color: white;
-}
-
-body.dark .navbar {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-body.dark .nav-links a.active {
-  color: #20c997;
 }

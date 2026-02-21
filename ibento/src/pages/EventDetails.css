@@ -1,0 +1,43 @@
+.event-details {
+  padding: 40px;
+}
+
+.event-details-container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.event-details img {
+  width: 400px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.event-info {
+  flex: 1;
+}
+
+.event-info h1 {
+  font-size: 2rem;
+}
+
+.seat-info {
+  margin: 15px 0;
+  font-weight: bold;
+  color: #198754;
+}
+
+.description {
+  margin-top: 20px;
+}
+
+.event-info button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #198754;
+  color: white;
+  cursor: pointer;
+}

@@ -1,38 +1,43 @@
-.events-page {
+.events-container {
   padding: 40px;
 }
 
 .events-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
   margin-top: 30px;
 }
 
 .event-card {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   overflow: hidden;
-  cursor: pointer;
-  transition: 0.3s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
 }
 
-.event-card:hover {
-  transform: translateY(-5px);
+body.dark .event-card {
+  background: #1e1e1e;
+  color: white;
 }
 
 .event-poster {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
 }
 
-.event-info {
-  padding: 15px;
+.event-content {
+  padding: 20px;
 }
 
-.event-description {
-  margin-top: 8px;
-  color: #555;
+.event-content button {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }

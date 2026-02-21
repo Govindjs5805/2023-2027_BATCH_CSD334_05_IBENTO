@@ -1,216 +1,110 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import {
-  doc,
-  getDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-  runTransaction,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
+import "./EventDetails.css";
 
 function EventDetails() {
-  const { eventId } = useParams();
-  const { user, fullName } = useAuth();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, userData } = useAuth();
 
   const [event, setEvent] = useState(null);
-  const [club, setClub] = useState(null);
-  const [registrationCount, setRegistrationCount] = useState(0);
-  const [registered, setRegistered] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [registeredCount, setRegisteredCount] = useState(0);
 
-  // 🔹 Fetch event + club
   useEffect(() => {
     const fetchEvent = async () => {
-      const eventRef = doc(db, "events", eventId);
-      const eventSnap = await getDoc(eventRef);
-
-      if (eventSnap.exists()) {
-        const eventData = eventSnap.data();
-        setEvent(eventData);
-
-        // Fetch club info
-        if (eventData.clubId) {
-          const clubSnap = await getDoc(
-            doc(db, "clubs", eventData.clubId)
-          );
-          if (clubSnap.exists()) {
-            setClub(clubSnap.data());
-          }
-        }
+      const snap = await getDoc(doc(db, "events", id));
+      if (snap.exists()) {
+        setEvent({ id: snap.id, ...snap.data() });
       }
-
-      setLoading(false);
     };
 
-    fetchEvent();
-  }, [eventId]);
-
-  // 🔹 Fetch registrations count
-  useEffect(() => {
     const fetchRegistrations = async () => {
       const q = query(
         collection(db, "registrations"),
-        where("eventId", "==", eventId)
+        where("eventId", "==", id)
       );
-
-      const snapshot = await getDocs(q);
-      setRegistrationCount(snapshot.size);
+      const regSnap = await getDocs(q);
+      setRegisteredCount(regSnap.size);
     };
 
+    fetchEvent();
     fetchRegistrations();
-  }, [eventId]);
-
-  // 🔹 Check if already registered
-  useEffect(() => {
-    if (!user) return;
-
-    const checkUserRegistration = async () => {
-      const q = query(
-        collection(db, "registrations"),
-        where("eventId", "==", eventId),
-        where("userId", "==", user.uid)
-      );
-
-      const snapshot = await getDocs(q);
-      if (!snapshot.empty) {
-        setRegistered(true);
-      }
-    };
-
-    checkUserRegistration();
-  }, [user, eventId]);
-
-  const isEventOver = () => {
-    if (!event?.date) return false;
-    const today = new Date();
-    const eventDate = new Date(event.date);
-    return eventDate < today;
-  };
-
-  const isFull =
-    event && registrationCount >= event.seatLimit;
-
-  const remainingSeats =
-    event ? event.seatLimit - registrationCount : 0;
+  }, [id]);
 
   const handleRegister = async () => {
     if (!user) {
       alert("Please login first");
+      navigate("/login");
       return;
     }
 
-    try {
-      await runTransaction(db, async (transaction) => {
-        const regQuery = query(
-          collection(db, "registrations"),
-          where("eventId", "==", eventId)
-        );
+    const q = query(
+      collection(db, "registrations"),
+      where("eventId", "==", id),
+      where("userId", "==", user.uid)
+    );
 
-        const regSnap = await getDocs(regQuery);
+    const existing = await getDocs(q);
 
-        if (regSnap.size >= event.seatLimit) {
-          throw "Event Full";
-        }
-
-        const newRegRef = doc(collection(db, "registrations"));
-
-        transaction.set(newRegRef, {
-          eventId,
-          userId: user.uid,
-          userEmail: user.email,
-          userName: fullName,
-          checkInStatus: false,
-          checkInTime: null,
-          registeredAt: serverTimestamp(),
-        });
-      });
-
-      alert("Successfully Registered!");
-      setRegistered(true);
-      setRegistrationCount((prev) => prev + 1);
-
-    } catch (error) {
-      alert("Event is full!");
+    if (!existing.empty) {
+      alert("Already registered");
+      return;
     }
+
+    await addDoc(collection(db, "registrations"), {
+      eventId: id,
+      eventTitle: event.title,
+      userId: user.uid,
+      userName: userData?.fullName || "Student",
+      userEmail: user.email,
+      checkInStatus: false,
+      registeredAt: new Date()
+    });
+
+    alert("Registration successful!");
+    setRegisteredCount(prev => prev + 1);
   };
 
-  if (loading) return <p style={{ padding: "40px" }}>Loading...</p>;
-  if (!event) return <p style={{ padding: "40px" }}>Event not found</p>;
+  if (!event) return <div style={{ padding: "40px" }}>Loading...</div>;
+
+  const seatsLeft = event.seatLimit - registeredCount;
+  const isFull = seatsLeft <= 0;
 
   return (
-    <div style={{ padding: "40px" }}>
-      <div style={{ maxWidth: "900px", margin: "auto" }}>
-        
-        {/* Poster */}
-        {event.posterURL && (
-          <img
-            src={event.posterURL}
-            alt="Event Poster"
-            style={{
-              width: "100%",
-              borderRadius: "12px",
-              marginBottom: "25px",
-            }}
-          />
-        )}
+    <div className="event-details">
 
-        <h1>{event.title}</h1>
+      <div className="event-details-container">
 
-        <p><strong>Date:</strong> {event.date}</p>
-        <p><strong>Venue:</strong> {event.venue}</p>
+        <img src={event.posterURL} alt={event.title} />
 
-        <p><strong>Total Registered:</strong> {registrationCount}</p>
-        <p><strong>Seats Left:</strong> {Math.max(remainingSeats, 0)}</p>
+        <div className="event-info">
+          <h1>{event.title}</h1>
+          <p><strong>Date:</strong> {event.date}</p>
+          <p><strong>Venue:</strong> {event.venue}</p>
+          <p><strong>Organizer:</strong> {event.clubName}</p>
 
-        {/* Club Info */}
-        {club && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              margin: "15px 0",
-            }}
-          >
-            {club.logoURL && (
-              <img
-                src={club.logoURL}
-                alt="Club Logo"
-                style={{
-                  width: "45px",
-                  height: "45px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-              />
-            )}
-            <span style={{ fontWeight: "bold" }}>{club.name}</span>
+          <div className="seat-info">
+            <span>Seats Left: {seatsLeft}</span>
           </div>
-        )}
 
-        <p style={{ marginTop: "20px", lineHeight: "1.6" }}>
-          {event.description}
-        </p>
+          <p className="description">{event.description}</p>
 
-        <div style={{ marginTop: "35px" }}>
-          {isEventOver() ? (
-            <button disabled>Event Completed</button>
-          ) : isFull ? (
-            <button disabled>Event Full</button>
-          ) : registered ? (
-            <button disabled>Already Registered</button>
-          ) : (
-            <button onClick={handleRegister}>
-              Register Now
+          {userData?.role === "student" && (
+            <button 
+              disabled={isFull}
+              onClick={handleRegister}
+            >
+              {isFull ? "Event Full" : "Register Now"}
             </button>
           )}
+
         </div>
+
       </div>
+
     </div>
   );
 }
