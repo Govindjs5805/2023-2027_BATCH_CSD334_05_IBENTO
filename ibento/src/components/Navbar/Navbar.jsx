@@ -32,6 +32,12 @@ function Navbar() {
             <li><Link to="/register">Register</Link></li>
           </>
         )}
+        {user && role === "superAdmin" && (
+  <>
+  <li><Link to="/">Home</Link></li>
+    <li><Link to="/superadmin">Super Dashboard</Link></li>
+  </>
+)}
 
         {/* STUDENT */}
         {user && role === "student" && (
@@ -45,6 +51,8 @@ function Navbar() {
         {/* CLUB LEAD */}
         {user && role === "clubLead" && (
           <>
+                        <li><Link to="/">Home</Link></li>
+
             <li><Link to="/admin">Dashboard</Link></li>
             <li><Link to="/admin/create-event">Create Event</Link></li>
           </>

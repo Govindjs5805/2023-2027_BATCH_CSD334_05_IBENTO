@@ -9,40 +9,60 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [clubId, setClubId] = useState(null);
+  const [clubName, setClubName] = useState(null);
   const [fullName, setFullName] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [clubLogo, setClubLogo] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-
-        try {
-          // 🔥 Fetch user document from Firestore
-          const docRef = doc(db, "users", firebaseUser.uid);
-          const userSnap = await getDoc(docRef);
-
-          if (userSnap.exists()) {
-            const data = userSnap.data();
-
-            setRole(data.role || null);
-            setClubId(data.clubId || null);
-            setFullName(data.fullName || null);
-          } else {
-            setRole(null);
-            setClubId(null);
-            setFullName(null);
-          }
-
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-
-      } else {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!currentUser) {
         setUser(null);
         setRole(null);
         setClubId(null);
+        setClubName(null);
         setFullName(null);
+        setLoading(false);
+        return;
+      }
+
+      setUser(currentUser);
+
+      const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setRole(userData.role);
+        setClubId(userData.clubId || null);
+        setFullName(userData.fullName || "");
+
+        // 🔥 Fetch club name from clubs collection
+        if (userData.clubId) {
+  console.log("User clubId:", userData.clubId);
+
+  const clubRef = doc(db, "clubs", userData.clubId);
+  console.log("Fetching club document:", clubRef.path);
+
+  const clubDoc = await getDoc(clubRef);
+
+  if (clubDoc.exists()) {
+    console.log("Club Data:", clubDoc.data());
+    const clubData = clubDoc.data();
+    setClubName(clubData.name);
+    setClubLogo(clubData.logoURL || null);
+  } else {
+    console.log("❌ Club document NOT FOUND");
+  }
+
+
+  if (clubDoc.exists()) {
+    const clubData = clubDoc.data();
+    setClubName(clubData.name);
+    setClubLogo(clubData.logoURL || null);
+  } else {
+    console.log("Club document not found!");
+  }
+}
       }
 
       setLoading(false);
@@ -57,8 +77,9 @@ export function AuthProvider({ children }) {
         user,
         role,
         clubId,
-        fullName,
-        loading
+        clubName,
+        clubLogo,
+        fullName
       }}
     >
       {!loading && children}

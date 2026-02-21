@@ -17,9 +17,6 @@ function AdminSidebar() {
 
       <ul className="admin-menu">
         <li>
-          <Link to="/admin">Dashboard</Link>
-        </li>
-        <li>
           <Link to="/admin/registrations">Registrations</Link>
         </li>
         <li>
