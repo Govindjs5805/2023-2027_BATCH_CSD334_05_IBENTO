@@ -23,7 +23,7 @@ function AdminSidebar() {
           <Link to="/admin/report">Reports</Link>
         </li>
         <li>
-  <Link to="/admin/create-event">Create Event</Link>
+        <Link to="/admin/create-event">Create Event</Link>
 </li>
 <li>
     <Link to="/admin/analytics">Analytics</Link>

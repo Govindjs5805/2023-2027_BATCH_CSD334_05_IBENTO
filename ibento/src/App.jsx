@@ -18,6 +18,9 @@ import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import Navbar from "./components/Navbar/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EventDetails from "./pages/EventDetails";
+import MyEvents from "./pages/MyEvents";
+import Ticket from "./pages/Ticket";
+import AdminCreateEvent from "./pages/AdminCreateEvent";
 
 function App() {
   return (
@@ -38,7 +41,7 @@ function App() {
 
         {/* Student */}
         <Route
-          path="/student"
+          path="/dashboard"
           element={
             <ProtectedRoute allowedRole="student">
               <StudentDashboard />
@@ -65,6 +68,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/my-events" element={
+  <ProtectedRoute allowedRole="student">
+    <MyEvents />
+  </ProtectedRoute>
+} />
+
+<Route path="/ticket/:registrationId" element={
+  <ProtectedRoute allowedRole="student">
+    <Ticket />
+  </ProtectedRoute>
+} />
 
         <Route
           path="/admin/report"
@@ -84,6 +98,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/admin/create-event"
+  element={
+    <ProtectedRoute allowedRole="clubLead">
+      <AdminCreateEvent />
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="/admin/checkin"

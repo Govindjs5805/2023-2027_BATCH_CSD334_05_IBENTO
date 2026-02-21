@@ -1,23 +1,16 @@
 import { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function MyEvents() {
-  const { user, fullName } = useAuth();
-  const [items, setItems] = useState([]);
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [registrations, setRegistrations] = useState([]);
 
   useEffect(() => {
-    const loadMyEvents = async () => {
+    const fetchRegistrations = async () => {
       if (!user) return;
 
       const q = query(
@@ -25,64 +18,42 @@ function MyEvents() {
         where("userId", "==", user.uid)
       );
 
-      const regSnap = await getDocs(q);
-      const enriched = [];
+      const snap = await getDocs(q);
+      const list = snap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-      for (const regDoc of regSnap.docs) {
-        const reg = regDoc.data();
-        const eventSnap = await getDoc(doc(db, "events", reg.eventId));
-
-        if (eventSnap.exists()) {
-          enriched.push({
-            id: regDoc.id,
-            ...reg,
-            event: eventSnap.data()
-          });
-        }
-      }
-
-      setItems(enriched);
+      setRegistrations(list);
     };
 
-    loadMyEvents();
+    fetchRegistrations();
   }, [user]);
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h2>Welcome, {fullName}</h2>
-      <p>Here are your registered events</p>
+    <div style={{ padding: "40px" }}>
+      <h2>My Events</h2>
 
-      <table width="100%" style={{ marginTop: "20px", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th align="left">Event</th>
-            <th align="left">Date</th>
-            <th align="left">Venue</th>
-            <th align="left">Status</th>
-            <th align="left">Ticket</th>
-          </tr>
-        </thead>
+      {registrations.map(reg => (
+        <div key={reg.id} style={{
+          background: "#f5f5f5",
+          padding: "20px",
+          marginBottom: "20px",
+          borderRadius: "10px"
+        }}>
+          <h3>{reg.eventTitle}</h3>
+          <p>Registered on: {reg.registeredAt?.toDate?.().toLocaleDateString?.() || "N/A"}</p>
+          <p>
+            Status: {reg.checkInStatus ? "Checked In" : "Not Checked In"}
+          </p>
 
-        <tbody>
-          {items.map(item => (
-            <tr key={item.id} style={{ borderTop: "1px solid #ccc" }}>
-              <td>{item.event.title}</td>
-              <td>{item.event.date}</td>
-              <td>{item.event.venue}</td>
-              <td>
-                {item.checkInStatus ? "Checked-in ✅" : "Not Checked-in"}
-              </td>
-              <td>
-                <button
-                  onClick={() => navigate(`/ticket/${item.id}`)}
-                >
-                  View Ticket
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <button
+            onClick={() => navigate(`/ticket/${reg.id}`)}
+          >
+            View Ticket
+          </button>
+        </div>
+      ))}
     </div>
   );
 }

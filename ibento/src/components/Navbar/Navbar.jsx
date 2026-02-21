@@ -43,15 +43,17 @@ function Navbar() {
         {user && role === "student" && (
           <>
             <NavLink to="/home">Home</NavLink>
+            <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/events">Events</NavLink>
-            <NavLink to="/student">Dashboard</NavLink>
+            <NavLink to="/my-events">My Events</NavLink>
           </>
         )}
 
         {/* Club Lead */}
         {user && role === "clubLead" && (
           <>
-            <NavLink to="/admin">Dashboard</NavLink>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/admin/create-event">Create Event</NavLink>
           </>
         )}
 

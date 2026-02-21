@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AdminLayout from "../components/Admin/AdminLayout";
 
