@@ -8,7 +8,7 @@
 
 .splash-inner {
   text-align: center;
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 .logo {
@@ -28,7 +28,7 @@
 
 .loading-fill {
   height: 100%;
-  background: white;
+  background: rgb(255, 255, 255);
   transition: width 0.2s ease;
 }
 
