@@ -12,6 +12,7 @@ function EventDetails() {
 
   const [event, setEvent] = useState(null);
   const [registeredCount, setRegisteredCount] = useState(0);
+  const [alreadyRegistered, setAlreadyRegtered] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -80,7 +81,6 @@ function EventDetails() {
       <div className="event-details-container">
 
         <img src={event.posterURL} alt={event.title} />
-        <p>Role :{user?.role}</p>
         <div className="event-info">
           <h1>{event.title}</h1>
           <p><strong>Date:</strong> {event.date}</p>
@@ -92,14 +92,23 @@ function EventDetails() {
           </div>
 
           <p className="description">{event.description}</p>
-
-          {seatsLeft >0 && userData?.role === "student" && (
-            <button 
-              onClick={handleRegister}
-            >REGISTER NOW
-              {isFull ? "Event Full" : "Register Now"}
-            </button>
-          )}
+          {user?.role === "student" && (
+  <>
+    {alreadyRegistered ? (
+      <button disabled style={{ background: "#ccc" }}>
+        Already Registered
+      </button>
+    ) : seatsLeft > 0 ? (
+      <button onClick={handleRegister} className="register-btn">
+        Register Now
+      </button>
+    ) : (
+      <button disabled style={{ background: "red" }}>
+        Sold Out
+      </button>
+    )}
+  </>
+)}
 
         </div>
 

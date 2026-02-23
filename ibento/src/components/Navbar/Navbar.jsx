@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link,NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -40,17 +40,17 @@ function Navbar() {
         )}
 
         {/* Student */}
-        {user && role === "student" && (
+        {user?.role === "student" && (
           <>
             <NavLink to="/home">Home</NavLink>
             <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/events">Events</NavLink>
-            <NavLink to="/my-events">My Events</NavLink>
+            <Link to="/my-events">My Events</Link>
           </>
         )}
 
         {/* Club Lead */}
-        {user && role === "clubLead" && (
+        {user?.role === "clubLead" && (
           <>
                       <NavLink to="/home">Home</NavLink>
 
@@ -60,7 +60,7 @@ function Navbar() {
         )}
 
         {/* Super Admin */}
-        {user && role === "superAdmin" && (
+        {user?.role === "superAdmin" && (
           <>
             <NavLink to="/superadmin">Dashboard</NavLink>
           </>
