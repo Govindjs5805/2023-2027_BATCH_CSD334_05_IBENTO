@@ -72,6 +72,7 @@ function EventDetails() {
 
   const seatsLeft = event.seatLimit - registeredCount;
   const isFull = seatsLeft <= 0;
+  console.log(userData);
 
   return (
     <div className="event-details">
@@ -79,7 +80,7 @@ function EventDetails() {
       <div className="event-details-container">
 
         <img src={event.posterURL} alt={event.title} />
-
+        <p>Role :{user?.role}</p>
         <div className="event-info">
           <h1>{event.title}</h1>
           <p><strong>Date:</strong> {event.date}</p>
@@ -92,11 +93,10 @@ function EventDetails() {
 
           <p className="description">{event.description}</p>
 
-          {userData?.role === "student" && (
+          {seatsLeft >0 && userData?.role === "student" && (
             <button 
-              disabled={isFull}
               onClick={handleRegister}
-            >
+            >REGISTER NOW
               {isFull ? "Event Full" : "Register Now"}
             </button>
           )}
