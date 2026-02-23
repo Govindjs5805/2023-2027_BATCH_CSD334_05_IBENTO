@@ -1,44 +1,23 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [clubId, setClubId] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          const userDocRef = doc(db, "users", firebaseUser.uid);
-          const userSnap = await getDoc(userDocRef);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
 
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-
-            setUser({
-              uid: firebaseUser.uid,
-              email: firebaseUser.email,
-              ...userData,
-            });
-
-            setClubId(userData.clubId || null);
-          } else {
-            setUser(null);
-            setClubId(null);
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          setUser(null);
-          setClubId(null);
-        }
+      if (currentUser) {
+        const storedRole = localStorage.getItem("role");
+        setRole(storedRole ? storedRole : "student");
       } else {
-        setUser(null);
-        setClubId(null);
+        setRole(null);
       }
 
       setLoading(false);
@@ -48,10 +27,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, clubId, loading }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, role, loading, setRole }}>
+      {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}

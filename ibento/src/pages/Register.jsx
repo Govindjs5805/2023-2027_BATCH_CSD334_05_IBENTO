@@ -1,78 +1,200 @@
-import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { auth } from "../firebase";
 
-function Register() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Register = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-const handleRegister = async (e) => {
-  e.preventDefault();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  const navigate = useNavigate();
 
-    const uid = userCredential.user.uid;
-    console.log("UID:", uid);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    await setDoc(doc(db, "users", uid), {
-      fullName: fullName,
-      email: email,
-      role: "student",
-      createdAt: new Date()
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
-    alert("Registration successful!");
-  } catch (error) {
-    console.error("REGISTER ERROR:", error);
-    alert(error.message);
-  }
-};
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      localStorage.setItem("role", "student");
+
+      await sendEmailVerification(userCredential.user);
+
+      setSuccess("Verification email sent. Please check your inbox.");
+
+      setTimeout(() => {
+        navigate("/verify-email");
+      }, 1500);
+
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
   return (
-    <div style={{ padding: "60px", maxWidth: "400px", margin: "auto" }}>
-      <h2>Register</h2>
+    <>
+      <style>{`
+        .auth-container {
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: radial-gradient(circle at top left, #1e1b4b, #0f0c29);
+          padding: 20px;
+        }
 
-      <form onSubmit={handleRegister}>
-        <input
-          type = "text"
-          placeholder="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
+        .auth-card {
+          width: 100%;
+          max-width: 420px;
+          padding: 40px;
+          border-radius: 18px;
+          background: rgba(30, 27, 75, 0.6);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(168, 85, 247, 0.2);
+          box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+          text-align: center;
+        }
 
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          required
-        />
+        .auth-card h2 {
+          font-size: 28px;
+          margin-bottom: 10px;
+          color: #c4b5fd;
+        }
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          required
-        />
+        .auth-subtitle {
+          font-size: 14px;
+          color: #a1a1aa;
+          margin-bottom: 25px;
+        }
 
-        <button type="submit" style={{ width: "100%", padding: "10px" }}>
-          Register
-        </button>
-      </form>
-    </div>
+        .auth-card input {
+          width: 100%;
+          padding: 12px 15px;
+          margin-bottom: 15px;
+          border-radius: 10px;
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          background: rgba(255, 255, 255, 0.05);
+          color: white;
+          outline: none;
+          font-size: 14px;
+          transition: 0.3s;
+        }
+
+        .auth-card input:focus {
+          border-color: #a855f7;
+          box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3);
+        }
+
+        .auth-card button {
+          width: 100%;
+          padding: 12px;
+          border-radius: 10px;
+          border: none;
+          background: linear-gradient(90deg, #7c3aed, #a855f7);
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+
+        .auth-card button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .auth-card button:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+        }
+
+        .auth-error {
+          background: rgba(255, 0, 0, 0.2);
+          color: #f87171;
+          padding: 10px;
+          border-radius: 8px;
+          margin-bottom: 15px;
+          font-size: 13px;
+        }
+
+        .auth-success {
+          background: rgba(34, 197, 94, 0.2);
+          color: #4ade80;
+          padding: 10px;
+          border-radius: 8px;
+          margin-bottom: 15px;
+          font-size: 13px;
+        }
+
+        .auth-footer {
+          margin-top: 20px;
+          font-size: 14px;
+          color: #a1a1aa;
+        }
+
+        .auth-footer a {
+          color: #a855f7;
+          text-decoration: none;
+          font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+          text-decoration: underline;
+        }
+      `}</style>
+
+      <div className="auth-container">
+        <div className="auth-card">
+          <h2>Create Account</h2>
+          <p className="auth-subtitle">Join the experience ✨</p>
+
+          {error && <div className="auth-error">{error}</div>}
+          {success && <div className="auth-success">{success}</div>}
+
+          <form onSubmit={handleSubmit}>
+            <input type="text" name="name" placeholder="Full Name" onChange={handleChange} required />
+            <input type="email" name="email" placeholder="Email Address" onChange={handleChange} required />
+            <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+            <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} required />
+            <button type="submit" disabled={loading}>
+              {loading ? "Creating Account..." : "Create Account"}
+            </button>
+          </form>
+
+          <p className="auth-footer">
+            Already have an account? <Link to="/login">Login</Link>
+          </p>
+        </div>
+      </div>
+    </>
   );
-}
+};
 
 export default Register;
