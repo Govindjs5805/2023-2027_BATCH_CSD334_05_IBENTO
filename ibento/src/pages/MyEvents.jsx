@@ -52,6 +52,14 @@ function MyEvents() {
           >
             View Ticket
           </button>
+          {new Date(reg.eventDate) < new Date() && (
+  <button 
+    onClick={() => navigate(`/feedback/${reg.eventId}`)}
+    style={{ background: "#8b5cf6", color: "white", padding: "8px 15px", border: "none", borderRadius: "5px", cursor: "pointer" }}
+  >
+    Give Feedback
+  </button>
+)}
         </div>
       ))}
     </div>

@@ -42,10 +42,6 @@ function Navbar() {
           <>
             <NavLink to="/admin">Dashboard</NavLink>
             <NavLink to="/admin/create-event">Create Event</NavLink>
-            <NavLink to="/admin/registrations">Registrations</NavLink>
-            <NavLink to="/admin/report">Report</NavLink>
-            <NavLink to="/admin/analytics">Analytics</NavLink>
-            <NavLink to="/admin/checkin">Check In</NavLink>
           </>
         )}
 

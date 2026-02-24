@@ -22,6 +22,9 @@ import EventDetails from "./pages/EventDetails";
 import MyEvents from "./pages/MyEvents";
 import Ticket from "./pages/Ticket";
 import AdminCreateEvent from "./pages/AdminCreateEvent";
+import Feedback from "./pages/Feedback";
+import AdminFeedbacks from "./pages/AdminFeedbacks";
+import AdminEventDocuments from "./pages/AdminEventDocuments";
 
 function App() {
   return (
@@ -51,6 +54,9 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/feedback/:eventId" element={<Feedback />} />
+
+<Route path="/admin/feedbacks" element={<ProtectedRoute allowedRole="clubLead"><AdminFeedbacks /></ProtectedRoute>} />
 
           <Route
             path="/my-events"
@@ -60,6 +66,22 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route 
+  path="/admin/feedbacks" 
+  element={
+    <ProtectedRoute allowedRole="clubLead">
+      <AdminFeedbacks />
+    </ProtectedRoute>
+  } 
+/>
+        <Route 
+  path="/admin/documents" 
+  element={
+    <ProtectedRoute allowedRole="clubLead">
+      <AdminEventDocuments />
+    </ProtectedRoute>
+  } 
+/>
 
           <Route
             path="/ticket/:registrationId"

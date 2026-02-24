@@ -8,11 +8,12 @@ import "./EventDetails.css";
 function EventDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, userData } = useAuth();
+  const { user, role, userData } = useAuth(); // Using role directly from context
 
   const [event, setEvent] = useState(null);
   const [registeredCount, setRegisteredCount] = useState(0);
-  const [alreadyRegistered, setAlreadyRegtered] = useState(false);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const [checkedIn, setCheckedIn] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -23,63 +24,60 @@ function EventDetails() {
     };
 
     const fetchRegistrations = async () => {
-      const q = query(
-        collection(db, "registrations"),
-        where("eventId", "==", id)
-      );
+      const q = query(collection(db, "registrations"), where("eventId", "==", id));
       const regSnap = await getDocs(q);
       setRegisteredCount(regSnap.size);
+
+      if (user) {
+        // Look for the specific registration for this user
+        const userReg = regSnap.docs.find(doc => doc.data().userId === user.uid);
+        if (userReg) {
+          setAlreadyRegistered(true);
+          setCheckedIn(userReg.data().checkInStatus || false);
+        }
+      }
     };
 
     fetchEvent();
     fetchRegistrations();
-  }, [id]);
+  }, [id, user]);
 
   const handleRegister = async () => {
     if (!user) {
-      alert("Please login first");
       navigate("/login");
       return;
     }
 
-    const q = query(
-      collection(db, "registrations"),
-      where("eventId", "==", id),
-      where("userId", "==", user.uid)
-    );
+    try {
+      await addDoc(collection(db, "registrations"), {
+        eventId: id,
+        eventTitle: event.title,
+        userId: user.uid,
+        userName: userData?.fullName || user.displayName || "Student",
+        userEmail: user.email,
+        checkInStatus: false,
+        registeredAt: new Date()
+      });
 
-    const existing = await getDocs(q);
-
-    if (!existing.empty) {
-      alert("Already registered");
-      return;
+      alert("Registration successful!");
+      setAlreadyRegistered(true);
+      setRegisteredCount(prev => prev + 1);
+    } catch (error) {
+      console.error(error);
+      alert("Registration failed.");
     }
-
-    await addDoc(collection(db, "registrations"), {
-      eventId: id,
-      eventTitle: event.title,
-      userId: user.uid,
-      userName: userData?.fullName || "Student",
-      userEmail: user.email,
-      checkInStatus: false,
-      registeredAt: new Date()
-    });
-
-    alert("Registration successful!");
-    setRegisteredCount(prev => prev + 1);
   };
 
   if (!event) return <div style={{ padding: "40px" }}>Loading...</div>;
 
+  // Logic for dates and seats
+  const today = new Date().toISOString().split("T")[0];
+  const isPastEvent = event.date < today;
   const seatsLeft = event.seatLimit - registeredCount;
-  const isFull = seatsLeft <= 0;
-  console.log(userData);
 
   return (
     <div className="event-details">
-
       <div className="event-details-container">
-
         <img src={event.posterURL} alt={event.title} />
         <div className="event-info">
           <h1>{event.title}</h1>
@@ -88,32 +86,58 @@ function EventDetails() {
           <p><strong>Organizer:</strong> {event.clubName}</p>
 
           <div className="seat-info">
-            <span>Seats Left: {seatsLeft}</span>
+            <span>Seats Left: {seatsLeft > 0 ? seatsLeft : 0}</span>
           </div>
 
           <p className="description">{event.description}</p>
-          {user?.role === "student" && (
-  <>
-    {alreadyRegistered ? (
-      <button disabled style={{ background: "#ccc" }}>
-        Already Registered
-      </button>
-    ) : seatsLeft > 0 ? (
-      <button onClick={handleRegister} className="register-btn">
-        Register Now
-      </button>
-    ) : (
-      <button disabled style={{ background: "red" }}>
-        Sold Out
-      </button>
-    )}
-  </>
-)}
 
+          <div style={{ marginTop: "30px" }}>
+            {user ? (
+              // Case 1: User is logged in as a student
+              role === "student" ? (
+                <>
+                  {isPastEvent ? (
+                    alreadyRegistered ? (
+                      <button 
+                        onClick={() => navigate(`/feedback/${id}`)}
+                        style={{ background: "#ffc107", color: "black" }}
+                      >
+                        Give Feedback ⭐
+                      </button>
+                    ) : (
+                      <button disabled style={{ background: "#6c757d" }}>
+                        Event Expired
+                      </button>
+                    )
+                  ) : alreadyRegistered ? (
+                    <button disabled style={{ background: "#198754", opacity: 0.7 }}>
+                      Already Registered ✅
+                    </button>
+                  ) : seatsLeft > 0 ? (
+                    <button onClick={handleRegister} className="register-btn">
+                      Register Now
+                    </button>
+                  ) : (
+                    <button disabled style={{ background: "red" }}>
+                      Sold Out
+                    </button>
+                  )}
+                </>
+              ) : (
+                // Case 2: User is logged in as Admin/ClubLead
+                <p style={{ color: "#666", fontStyle: "italic" }}>
+                  Logged in as {role}. Admins cannot register.
+                </p>
+              )
+            ) : (
+              // Case 3: Guest User
+              <button onClick={() => navigate("/login")} className="register-btn">
+                Login to Register
+              </button>
+            )}
+          </div>
         </div>
-
       </div>
-
     </div>
   );
 }

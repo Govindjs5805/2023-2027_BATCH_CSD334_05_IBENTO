@@ -1,82 +1,62 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import "./AdminLayout.css";
 
-function AdminLayout({ children }) {
+const AdminLayout = ({ children }) => {
   const { clubName, clubLogo } = useAuth();
-  console.log("Club Logo:", clubLogo);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      
-      {/* Sidebar */}
-      <div
-        style={{
-          width: "240px",
-          background: "#051a0e",
-          color: "white",
-          padding: "20px"
-        }}
-      >
-        <h2>Admin Panel</h2>
-        {clubLogo && (
-  <img
-    src={clubLogo}
-    alt="Club Logo"
-    style={{
-      width: "70px",
-      height: "60px",
-      objectFit: "scale-down",
-      marginTop: "10px"
-    }}
-  />
-)}
-        {/* 🔥 Club Name */}
-        {clubName && (
-          <p
-            style={{
-              marginTop: "4px",
-              fontSize: "14px",
-              opacity: 0.8
-            }}
-          >
-            {clubName}
-          </p>
-        )}
-
-        <div style={{ marginTop: "30px" }}>
-
-          <p>
-            <Link to="/admin/checkin" style={{ color: "white" }}>
-              Check-In
-            </Link>
-          </p>
-
-          <p>
-            <Link to="/admin/registrations" style={{ color: "white" }}>
-              Registrations
-            </Link>
-          </p>
-
-          <p>
-            <Link to="/admin/analytics" style={{ color: "white" }}>
-              Analytics
-            </Link>
-          </p>
-
-          <p>
-            <Link to="/admin/report" style={{ color: "white" }}>
-              Report
-            </Link>
-          </p>
+    <div className="admin-container">
+      {/* Side Panel */}
+      <aside className="admin-sidebar">
+        <div className="sidebar-brand-section">
+          <div className="club-logo-container">
+            {clubLogo ? (
+              <img src={clubLogo} alt="Club Logo" className="sidebar-club-logo" />
+            ) : (
+              <div className="club-logo-placeholder">
+                {clubName ? clubName.charAt(0) : "C"}
+              </div>
+            )}
+          </div>
+          <h3 className="sidebar-club-name">{clubName || "Club Admin"}</h3>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, padding: "30px" }}>
+        <nav className="sidebar-nav">
+          <NavLink to="/admin" end className={({ isActive }) => isActive ? "active" : ""}>
+            📊 Dashboard
+          </NavLink>
+          <NavLink to="/admin/create-event" className={({ isActive }) => isActive ? "active" : ""}>
+            ➕ Create Event
+          </NavLink>
+          <NavLink to="/admin/registrations" className={({ isActive }) => isActive ? "active" : ""}>
+            👥 Registrations
+          </NavLink>
+          <NavLink to="/admin/checkin" className={({ isActive }) => isActive ? "active" : ""}>
+            ✅ Check-In
+          </NavLink>
+          <NavLink to="/admin/documents" className={({ isActive }) => isActive ? "active" : ""}>
+            📁 Documents
+          </NavLink>
+          <NavLink to="/admin/feedbacks" className={({ isActive }) => isActive ? "active" : ""}>
+            💬 Feedbacks
+          </NavLink>
+          <NavLink to="/admin/report" className={({ isActive }) => isActive ? "active" : ""}>
+            📄 Reports
+          </NavLink>
+          <NavLink to="/admin/analytics" className={({ isActive }) => isActive ? "active" : ""}>
+            📈 Analytics
+          </NavLink>
+        </nav>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="admin-main-content">
         {children}
-      </div>
+      </main>
     </div>
   );
-}
+};
 
 export default AdminLayout;
