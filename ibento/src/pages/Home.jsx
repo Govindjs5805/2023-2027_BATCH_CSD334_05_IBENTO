@@ -18,9 +18,12 @@ function Home() {
     "/IEEE-logo-WHITE.png", 
     "/Mulearn Logo.png",
     "/tinkerhub.png",
+<<<<<<< HEAD
        "/IEDC WhiteSVG 1.png", 
      "/FOCES White 1.png", 
  "/Mulearn Logo.png",
+=======
+>>>>>>> cf70bd36bd2559b539ba2045b87d97d41fbf00ad
     "/Group 13.png"
   ];
 
