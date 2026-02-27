@@ -18,11 +18,7 @@ function Home() {
     "/IEEE-logo-WHITE.png", 
     "/Mulearn Logo.png",
     "/tinkerhub.png",
-     "/FOCES White 1.png", 
-    "/IEDC WhiteSVG 1.png", 
-    "/IEEE-logo-WHITE.png", 
-    "/Mulearn Logo.png",
-    "/tinkerhub.png"
+    "/Group 13.png"
   ];
 
   useEffect(() => {
