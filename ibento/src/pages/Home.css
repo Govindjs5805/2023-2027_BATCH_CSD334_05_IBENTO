@@ -10,7 +10,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  margin-top: -110px; /* Pulls marquee into hero area */
+  margin-top: -50px; /* Pulls marquee into hero area */
   padding-bottom: 20px;
   z-index: 5; /* Between hero bg and hero content */
   pointer-events: none; /* Let clicks pass to hero buttons */

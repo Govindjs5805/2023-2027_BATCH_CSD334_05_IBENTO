@@ -41,7 +41,7 @@ function Home() {
       <CurvedLoop 
         logos={forumLogos} 
         speed={0.4} 
-        curveAmount={160} 
+        curveAmount={0} 
         logoSize={80} 
       />
 
