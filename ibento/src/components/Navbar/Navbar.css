@@ -113,7 +113,7 @@ body {
 .nav-links a {
   color: #ffffff;
   text-decoration: none;
-  margin-left: 20px;
+  margin-left: 17px;
   font-size: 18px;
   transition: 0.3s;
 }
@@ -123,9 +123,8 @@ body {
 }
 
 .logout-btn {
-  background: rgba(220, 38, 38, 0.2);
-  color: #ef4444;
-  border: 1px solid rgba(220, 38, 38, 0.4);
+  background: #8b5cf6;
+  color: #ffffff;
   padding: 6px 15px;
   border-radius: 8px;
   margin-left: 20px;

@@ -16,7 +16,13 @@ function Home() {
     "/FOCES White 1.png", 
     "/IEDC WhiteSVG 1.png", 
     "/IEEE-logo-WHITE.png", 
-    "/Mulearn Logo.png"
+    "/Mulearn Logo.png",
+    "/tinkerhub.png",
+     "/FOCES White 1.png", 
+    "/IEDC WhiteSVG 1.png", 
+    "/IEEE-logo-WHITE.png", 
+    "/Mulearn Logo.png",
+    "/tinkerhub.png"
   ];
 
   useEffect(() => {
