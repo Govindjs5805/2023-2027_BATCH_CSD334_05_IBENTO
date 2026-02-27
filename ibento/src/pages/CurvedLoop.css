@@ -1,10 +1,10 @@
 .curved-loop-jacket.logo-mode {
   width: 100vw; /* Spans full viewport width */
-  height: 250px;
+  height: 300px;
   display: block;
   position: relative;
   z-index: 50; 
-  margin-top: -100px; /* Pulls logos into the hero area */
+  margin-top: -70px; /* Pulls logos into the hero area */
   pointer-events: none;
   overflow: visible;
   left: 0;
@@ -20,7 +20,6 @@
 
 .curved-loop-svg image {
   pointer-events: auto;
-  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.7));
   transition: transform 0.3s ease, filter 0.3s ease;
   cursor: pointer;
 }
