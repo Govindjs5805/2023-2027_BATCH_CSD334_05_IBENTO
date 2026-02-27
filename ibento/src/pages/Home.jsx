@@ -10,17 +10,13 @@ function Home() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
 
-  // DEFINE YOUR 9 DIFFERENT LOGO PATHS HERE
+  // 1. DEFINE YOUR 9 LOGOS HERE
+  // These files MUST be in your /public folder
   const forumLogos = [
-    "/logo1.png",
-    "/logo2.png",
-    "/logo3.png",
-    "/logo4.png",
-    "/logo5.png",
-    "/logo6.png",
-    "/logo7.png",
-    "/logo8.png",
-    "/logo9.png"
+    "/FOCES White 1.png", 
+    "/IEDC WhiteSVG 1.png", 
+    "/IEEE-logo-WHITE.png", 
+    "/Mulearn Logo.png"
   ];
 
   useEffect(() => {
@@ -37,12 +33,13 @@ function Home() {
     <div className="home-page-layout">
       <Hero />
 
-      {/* Pass the array of logos to the component */}
+      {/* 2. THE CURVED LOOP WITH 9 LOGOS */}
+      {/* Ensure this is NOT wrapped in a container that has padding/margins */}
       <CurvedLoop 
         logos={forumLogos} 
-        speed={0.4} 
+        speed={0.2} 
         curveAmount={0} 
-        logoSize={80} 
+        logoSize={120} 
       />
 
       <section className="home-section">
@@ -59,7 +56,6 @@ function Home() {
                 <div className="card-content">
                   <h3>{event.title}</h3>
                   <p className="event-loc">📍 {event.location || "Campus Hub"}</p>
-                  <p className="event-desc">{event.description?.slice(0, 60)}...</p>
                   <button className="glass-btn-sm">View Details</button>
                 </div>
             </div>
@@ -67,7 +63,20 @@ function Home() {
         </div>
       </section>
 
-      {/* Rest of your sections... */}
+      {/* Meet the Organizers Section */}
+      <section className="home-section">
+        <h2 className="section-title">Meet the Organizers</h2>
+        <div className="organizers-grid">
+          <div className="org-card">
+            <div className="org-avatar">👑</div>
+            <h4>Lead Coordinator</h4>
+          </div>
+          <div className="org-card">
+            <div className="org-avatar">💻</div>
+            <h4>Tech Team</h4>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
