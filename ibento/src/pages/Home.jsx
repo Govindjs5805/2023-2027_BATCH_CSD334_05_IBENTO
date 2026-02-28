@@ -22,7 +22,6 @@ function Home() {
     "/Group 13.png"
   ];
 
-  // Forum Data for the Organizer Section
   const forums = [
     { name: "FOCES", img: "/FOCES White 1.png" },
     { name: "IEDC", img: "/IEDC WhiteSVG 1.png" },
@@ -44,7 +43,10 @@ function Home() {
 
   return (
     <div className="home-page-layout">
-      <Hero />
+      {/* Hero section handles its own background, but we wrap it to ensure continuity */}
+      <div className="hero-wrapper">
+        <Hero />
+      </div>
 
       <CurvedLoop 
         logos={forumLogos} 
@@ -74,9 +76,8 @@ function Home() {
         </div>
       </section>
 
-      {/* Modernized Organizer Section */}
       <section className="organizers-section">
-        <h2 className="section-title">Our Communities</h2>
+        <h2 className="section-title organizers-title">Our Communities</h2>
         <div className="organizers-grid">
           {forums.map((forum, index) => (
             <div className="org-card" key={index}>
