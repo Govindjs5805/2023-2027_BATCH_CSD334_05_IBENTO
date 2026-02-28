@@ -11,7 +11,7 @@
   overflow: hidden;
   position: relative;
   margin-top: -50px; 
-  padding-bottom: 0px; /* Reduced to close gap */
+  padding-bottom: 0px; 
   z-index: 5; 
   pointer-events: none; 
 }
@@ -29,25 +29,29 @@
 /* --- EVENT CARDS SECTION --- */
 .home-section {
   max-width: 1400px;
-  /* Reduced top margin from 60px to -30px to tuck under the curve */
   margin: -30px auto 100px; 
-  padding: 0 40px;
+  padding: 30px 40px;
   position: relative;
+  background: radial-gradient(
+    circle at center,
+    #141018 0%,
+    #0b0b12 40%,
+    #000000 100%
+  );
 }
 
 .section-title {
   font-size: 5rem;
   font-weight: 900;
-  /* Added a subtle gradient to the title for a modern look */
   background: linear-gradient(to bottom, #ffffff, #a78bfa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 30px;
   text-align: center;
-  font-weight: 800;
   position: relative;
   letter-spacing: -1.5px;
 }
+
 .section-title::after {
   content: '';
   position: absolute;
@@ -61,27 +65,25 @@
   z-index: -1;
   opacity: 0.5;
 }
+
 .events-grid {
   display: flex;
   flex-direction: row;
   overflow-x: auto;
-  gap: 30px; /* Increased gap for breathing room */
+  gap: 30px;
   padding: 20px 10px 60px;
   scroll-behavior: smooth;
-  /* Added snap alignment for professional scrolling */
   scroll-snap-type: x mandatory;
 }
 
-/* Hide scrollbar but keep functionality */
 .events-grid::-webkit-scrollbar { display: none; }
 .events-grid { -ms-overflow-style: none; scrollbar-width: none; }
 
 .event-card {
-  flex: 0 0 360px; /* Slightly wider cards */
+  flex: 0 0 360px;
   scroll-snap-align: center;
   background: rgba(10, 10, 15, 0.8) !important;
   backdrop-filter: blur(20px);
-  /* Refined border color to match IBENTO theme */
   border: 1px solid rgba(255, 255, 255, 0.08); 
   border-radius: 32px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -94,14 +96,13 @@
 .event-card:hover {
   transform: translateY(-20px) scale(1.02);
   border-color: rgba(139, 92, 246, 0.6);
-  /* Added purple-tinted shadow */
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.2);
 }
 
 .card-image { 
   height: 240px;
   margin: 12px;
-  border-radius: 24px; /* Slightly shorter image for better proportions */
+  border-radius: 24px;
   overflow: hidden;
 }
 
@@ -113,7 +114,7 @@
 }
 
 .event-card:hover .card-image img {
-  transform: scale(1.1); /* Zoom effect on hover */
+  transform: scale(1.1);
 }
 
 .event-badge {
@@ -137,11 +138,13 @@
   color: white !important;
 }
 
-.card-content h3 { 
-  font-size: 1.4rem; 
-  margin-bottom: 10px; 
-  font-weight: 700; 
-  letter-spacing: -0.5px;
+.card-content h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #fff, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .event-loc { 
@@ -154,82 +157,8 @@
   gap: 6px;
 }
 
-.event-desc { 
-  color: rgba(255, 255, 255, 0.5); 
-  font-size: 0.85rem; 
-  line-height: 1.6; 
-  margin-bottom: 20px;
-}
-
 .glass-btn-sm {
-  width: 100%; 
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(139, 92, 246, 0.4);
-  color: white; 
-  padding: 14px; 
-  border-radius: 14px;
-  font-weight: 700; 
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.75rem;
-  transition: all 0.3s ease;
-}
-
-.event-card:hover .glass-btn-sm { 
-  background: #8b5cf6; 
-  border-color: #8b5cf6;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
-}
-
-/* --- ORGANIZERS --- */
-.organizers-grid { 
-  display: flex; 
-  justify-content: center; 
-  flex-wrap: wrap; 
-  gap: 30px; 
-}
-
-.org-card {
-  width: 280px; 
-  padding: 40px 20px; 
-  text-align: center;
-  background: rgba(255, 255, 255, 0.02); 
-  backdrop-filter: blur(10px);
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.08); 
-  color: white;
-  transition: 0.3s ease;
-}
-
-.org-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.org-avatar {
-  width: 100px; 
-  height: 100px; 
-  border-radius: 50%; 
-  margin: 0 auto 20px;
-  background: linear-gradient(#000, #000) padding-box, 
-              linear-gradient(45deg, #8b5cf6, #ec4899) border-box;
-  border: 3px solid transparent; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  font-size: 2rem;
-  box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
-}
-.card-content h3 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-  background: linear-gradient(90deg, #fff, #a78bfa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.glass-btn-sm {
+  width: 100%;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
@@ -237,11 +166,96 @@
   padding: 16px;
   border-radius: 18px;
   transition: 0.4s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
 }
 
 .event-card:hover .glass-btn-sm {
   background: #fff;
-  color: #000; /* Inverts color on hover for maximum impact */
+  color: #000;
   border-color: #fff;
   transform: scale(1.02);
+}
+
+/* --- NEW ORGANIZERS (COMMUNITIES) SECTION --- */
+.organizers-section {
+  margin-top: -160px;
+  padding: 100px 5% 150px;
+  background: radial-gradient(
+    circle at center,
+    #141018 0%,
+    #0b0b12 40%,
+    #000000 100%
+  );
+}
+
+.organizers-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.org-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.5s ease;
+  width: 160px;
+}
+
+.org-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.org-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) brightness(0.8);
+  transition: all 0.5s ease;
+}
+
+.org-card h4 {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.org-card:hover {
+  transform: translateY(-10px);
+}
+
+.org-card:hover .org-avatar {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+}
+
+.org-card:hover img {
+  filter: grayscale(0) brightness(1);
+  transform: scale(1.1);
+}
+
+.org-card:hover h4 {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }

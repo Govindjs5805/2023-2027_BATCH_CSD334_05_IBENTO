@@ -10,18 +10,26 @@ function Home() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
 
-  // 1. DEFINE YOUR 9 LOGOS HERE
-  // These files MUST be in your /public folder
   const forumLogos = [
     "/FOCES White 1.png", 
     "/IEDC WhiteSVG 1.png", 
     "/IEEE-logo-WHITE.png", 
     "/Mulearn Logo.png",
     "/tinkerhub.png",
-       "/IEDC WhiteSVG 1.png", 
-     "/FOCES White 1.png", 
- "/Mulearn Logo.png",
+    "/IEDC WhiteSVG 1.png", 
+    "/FOCES White 1.png", 
+    "/Mulearn Logo.png",
     "/Group 13.png"
+  ];
+
+  // Forum Data for the Organizer Section
+  const forums = [
+    { name: "FOCES", img: "/FOCES White 1.png" },
+    { name: "IEDC", img: "/IEDC WhiteSVG 1.png" },
+    { name: "IEEE", img: "/IEEE-logo-WHITE.png" },
+    { name: "μLearn", img: "/Mulearn Logo.png" },
+    { name: "TinkerHub", img: "/tinkerhub.png" },
+    { name: "PRODDEC", img: "/Group 13.png" }
   ];
 
   useEffect(() => {
@@ -38,11 +46,9 @@ function Home() {
     <div className="home-page-layout">
       <Hero />
 
-      {/* 2. THE CURVED LOOP WITH 9 LOGOS */}
-      {/* Ensure this is NOT wrapped in a container that has padding/margins */}
       <CurvedLoop 
         logos={forumLogos} 
-        speed={0.2} 
+        speed={0.05} 
         curveAmount={0} 
         logoSize={80} 
       />
@@ -52,34 +58,34 @@ function Home() {
         <div className="events-grid">
           {events.map(event => (
             <div className="event-card" key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
-               <div className="card-image">
-                  <img src={event.posterURL || "https://via.placeholder.com/400x600"} alt={event.title} />
-                  <div className="event-badge">
-                    {event.date ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "TBA"}
-                  </div>
+              <div className="card-image">
+                <img src={event.posterURL || "https://via.placeholder.com/400x600"} alt={event.title} />
+                <div className="event-badge">
+                  {event.date ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "TBA"}
                 </div>
-                <div className="card-content">
-                  <h3>{event.title}</h3>
-                  <p className="event-loc">📍 {event.location || "Campus Hub"}</p>
-                  <button className="glass-btn-sm">View Details</button>
-                </div>
+              </div>
+              <div className="card-content">
+                <h3>{event.title}</h3>
+                <p className="event-loc">📍 {event.location || "Campus Hub"}</p>
+                <button className="glass-btn-sm">View Details</button>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Meet the Organizers Section */}
-      <section className="home-section">
-        <h2 className="section-title">Meet the Organizers</h2>
+      {/* Modernized Organizer Section */}
+      <section className="organizers-section">
+        <h2 className="section-title">Our Communities</h2>
         <div className="organizers-grid">
-          <div className="org-card">
-            <div className="org-avatar">👑</div>
-            <h4>Lead Coordinator</h4>
-          </div>
-          <div className="org-card">
-            <div className="org-avatar">💻</div>
-            <h4>Tech Team</h4>
-          </div>
+          {forums.map((forum, index) => (
+            <div className="org-card" key={index}>
+              <div className="org-avatar">
+                <img src={forum.img} alt={forum.name} />
+              </div>
+              <h4>{forum.name}</h4>
+            </div>
+          ))}
         </div>
       </section>
     </div>
