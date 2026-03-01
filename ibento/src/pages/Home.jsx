@@ -5,7 +5,8 @@ import { db } from "../firebase";
 import Hero from "../components/Home/Hero";
 import CurvedLoop from "./CurvedLoop"; 
 import Footer from "../components/Footer/Footer"; 
-import "./Home.css"; 
+import "./Home.css";
+import Reviews from "../components/feedback/Reviews";
 
 function Home() {
   const navigate = useNavigate();
@@ -98,6 +99,7 @@ function Home() {
           ))}
         </div>
       </section>
+      <Reviews />
 
       {/* 5. Integrated Footer */}
       <Footer />
