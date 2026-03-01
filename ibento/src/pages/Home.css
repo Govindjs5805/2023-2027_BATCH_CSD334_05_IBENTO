@@ -1,15 +1,11 @@
-/* --- GLOBAL BLENDING --- */
+/* --- LAYOUT & THEME --- */
 .home-page-layout {
   background: #000;
   color: white;
   overflow-x: hidden;
 }
 
-/* Fixes the "Cutting" effect between Hero and Content */
-.hero-container-main {
-  position: relative;
-  z-index: 10;
-}
+.hero-container-main { position: relative; z-index: 10; }
 
 .section-blender {
   position: absolute;
@@ -22,132 +18,161 @@
   pointer-events: none;
 }
 
-/* --- HEADINGS (Massive & High Contrast) --- */
+.home-section {
+  padding: 60px 5%;
+  background: radial-gradient(circle at top, #0e0725 0%, #000 70%);
+  z-index: 11;
+  position: relative;
+}
+
 .massive-title {
   display: block;
-  font-size: clamp(2rem, 10vw, 4rem) !important; /* Forces it to be huge */
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   font-weight: 900;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: -3px;
-  margin: 80px 0 40px;
-  background: linear-gradient(180deg, #fff 0%, rgba(167, 139, 250, 0.6) 100%);
+  letter-spacing: -2px;
+  margin-bottom: 50px;
+  background: linear-gradient(180deg, #fff 30%, rgba(167, 139, 250, 0.4) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 0.9;
-  border: none !important; /* Removes the black line glitch */
 }
 
-/* --- EVENT SECTION --- */
-.home-section {
-  padding: 30px 5%;
-  background: radial-gradient(circle at bottom, #0e0725 0%, #07010f 70%);
-  position: relative;
-  z-index: 11;
-}
-
+/* --- HORIZONTAL GRID --- */
 .events-grid {
   display: flex;
   overflow-x: auto;
   gap: 30px;
-  padding: 20px 0 0px;
+  padding: 20px 10px 80px;
+  scrollbar-width: none; /* Firefox */
 }
 .events-grid::-webkit-scrollbar { display: none; }
 
-.event-card {
-  flex: 0 0 380px;
-  background: rgb(255, 255, 255);
+/* --- MODERN EVENT CARD --- */
+.modern-event-card {
+  flex: 0 0 350px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 10px;
-  transition: 0.4s ease;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  padding: 16px;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
 }
 
-.event-card:hover {
-  transform: translateY(-15px);
-  background: rgba(167, 139, 250, 0.08);
+.modern-event-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  background: rgba(255, 255, 255, 0.08);
   border-color: #a78bfa;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 20px rgba(167, 139, 250, 0.15);
 }
 
-.card-image-box {
-  height: 260px;
-  border-radius: 28px;
+.event-img-container {
+  width: 100%;
+  height: 240px;
+  border-radius: 20px;
   overflow: hidden;
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.card-image-box img { width: 100%; height: 100%; object-fit: cover; }
+.event-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
 
-/* THE DATE PILL */
-.event-date-pill {
+.modern-event-card:hover .event-img-container img {
+  transform: scale(1.1);
+}
+
+/* Float Badges */
+.modern-date-badge {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #fff;
-  color: #000;
-  padding: 8px 14px;
-  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 10px 14px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  font-weight: 900;
-  display: flex;
-  flex-direction: column;
+  z-index: 2;
 }
 
-.pill-month { font-size: 0.7rem; color: #8b5cf6; text-transform: uppercase; }
-.pill-day { font-size: 1.3rem; line-height: 1; }
+.m-month { display: block; font-size: 0.7rem; font-weight: 800; color: #a78bfa; text-transform: uppercase; }
+.m-day { display: block; font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-.card-info h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 20px; color: black;}
-
-/* NEW BUTTON STYLE */
-.neon-detail-btn {
-  width: 100%;
-  padding: 16px;
-  border-radius: 18px;
+.organizer-tag {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
   background: #a78bfa;
   color: #000;
-  border: none;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.7rem;
   font-weight: 900;
   text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(167, 139, 250, 0.3);
 }
 
-/* --- COMMUNITIES (Single Line Round) --- */
-.organizers-section { padding: 80px 5%;   
-  background: radial-gradient(circle at top, #0e0725 0%, #07010f 70%);
- }
-
-.organizers-row {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  padding: 40px;
+.modern-card-info h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  padding: 0 5px;
 }
 
-.community-circle-card { display: flex; flex-direction: column; align-items: center; }
-
-.community-avatar {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.modern-view-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 25px;
-  transition: 0.5s;
+  gap: 10px;
+  transition: 0.3s;
+}
+
+.modern-view-btn:hover {
+  filter: brightness(1.2);
+  gap: 15px;
+}
+
+/* --- COMMUNITIES --- */
+.organizers-section { padding: 80px 5% 120px; background: #000; }
+.organizers-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.community-circle-card { text-align: center; }
+.community-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: 0.4s;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 .community-avatar img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); }
-
 .community-circle-card:hover .community-avatar {
+  transform: scale(1.05);
+  border-color: #a78bfa;
   background: #fff;
-  transform: translateY(-10px);
-  box-shadow: 0 0 40px rgba(167, 139, 250, 0.5);
 }
 .community-circle-card:hover img { filter: grayscale(0) brightness(0); }
-
-.community-circle-card h4 { margin-top: 15px; color: #64748b; font-weight: 700; }

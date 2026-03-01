@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import Hero from "../components/Home/Hero";
 import CurvedLoop from "./CurvedLoop"; 
-import Footer from "../components/Footer/Footer"; // [Importing the Footer]
+import Footer from "../components/Footer/Footer"; 
 import "./Home.css"; 
 
 function Home() {
@@ -39,33 +39,45 @@ function Home() {
 
   return (
     <div className="home-page-layout">
-      {/* 1. Hero Section */}
+      {/* 1. Hero Section with Glow Blender */}
       <div className="hero-container-main">
         <Hero />
         <div className="section-blender"></div> 
       </div>
 
-      {/* 2. Logo Branding Strip */}
+      {/* 2. Smooth Scrolling Logo Strip */}
       <div className="branding-strip">
         <CurvedLoop logos={forumLogos} speed={0.05} curveAmount={0} logoSize={90} />
       </div>
 
-      {/* 3. Events Section */}
+      {/* 3. Modern Events Section */}
       <section className="home-section">
         <h2 className="massive-title">Upcoming Events</h2>
         <div className="events-grid">
           {events.map(event => (
-            <div className="event-card" key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
-              <div className="card-image-box">
+            <div className="modern-event-card" key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
+              <div className="event-img-container">
                 <img src={event.posterURL} alt={event.title} />
-                <div className="event-date-pill">
-                  <span className="pill-month">{new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}</span>
-                  <span className="pill-day">{new Date(event.date).getDate()}</span>
+                
+                {/* Modern Date Badge */}
+                <div className="modern-date-badge">
+                  <span className="m-month">{new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                  <span className="m-day">{new Date(event.date).getDate()}</span>
+                </div>
+
+                {/* Organizer Forum Tag */}
+                <div className="organizer-tag">
+                  {event.organizer || "Campus Event"}
                 </div>
               </div>
-              <div className="card-info">
+
+              <div className="modern-card-info">
                 <h3>{event.title}</h3>
-                <button className="neon-detail-btn">View Details</button>
+                <div className="card-footer-action">
+                  <button className="modern-view-btn">
+                    View Details <span>→</span>
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -87,7 +99,7 @@ function Home() {
         </div>
       </section>
 
-      {/* 5. Footer Section */}
+      {/* 5. Integrated Footer */}
       <Footer />
     </div>
   );
