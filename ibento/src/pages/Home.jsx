@@ -18,7 +18,7 @@ function Home() {
     { name: "μLearn", img: "/Mulearn Logo.png" },
     { name: "TinkerHub", img: "/tinkerhub.png" },
     { name: "PRODDEC", img: "/Group 13.png" },
-    { name: "gdg", img: "/gdg.png" }
+    { name: "GDG", img: "/gdg.png" }
   ];
 
   useEffect(() => {
