@@ -45,7 +45,7 @@ function Home() {
       </div>
 
       <div className="branding-strip">
-        <CurvedLoop logos={forumLogos} speed={0.1} curveAmount={0} logoSize={90} />
+        <CurvedLoop logos={forumLogos} speed={0.05} curveAmount={0} logoSize={90} />
       </div>
 
       <section className="home-section">
