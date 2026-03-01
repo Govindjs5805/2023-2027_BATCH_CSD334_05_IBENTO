@@ -1,0 +1,121 @@
+.my-events-page {
+  background: radial-gradient(circle at center, #11111d 0%, #050505 80%);
+  min-height: 100vh;
+  padding: 80px 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+/* Metallic Title Styling */
+.my-events-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.massive-title {
+  font-size: 5rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: -3px;
+  background: linear-gradient(to bottom, #ffffff 40%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.title-underline {
+  width: 60px;
+  height: 4px;
+  background: #8b5cf6; /* IBENTO Purple */
+  margin: 15px auto;
+  border-radius: 2px;
+}
+
+.subtitle {
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+/* Glass Card Design */
+.my-events-list {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.my-event-card {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s ease;
+}
+
+.my-event-card:hover {
+  transform: translateX(10px);
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(25, 25, 25, 0.8);
+}
+
+.card-info h3 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+.reg-date {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.status-text {
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+.status-green { color: #22c55e; }
+.status-red { color: #ef4444; }
+
+/* Buttons */
+.card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.ticket-btn, .feedback-btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.ticket-btn {
+  background: #ffffff;
+  color: #000;
+}
+
+.feedback-btn {
+  background: #8b5cf6;
+  color: white;
+}
+
+.ticket-btn:hover, .feedback-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+@media (max-width: 768px) {
+  .massive-title { font-size: 3rem; }
+  .my-event-card { flex-direction: column; text-align: center; }
+}

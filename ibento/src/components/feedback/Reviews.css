@@ -12,7 +12,7 @@
 }
 
 .reviews-header span {
-  color: #ef4444; /* Match the red highlight in your reference */
+  color: #8b5cf6; /* Match the red highlight in your reference */
   font-weight: bold;
 }
 
@@ -123,7 +123,7 @@
 }
 
 .control-btn.next {
-  background: #ef4444; /* Match red theme button */
+  background: #8b5cf6; /* Match red theme button */
 }
 
 .control-btn:hover {
@@ -144,4 +144,202 @@
 .reviewer-avatar {
   box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+/* 1. Main Dashboard Wrapper - The New Deep Background */
+div[style*="padding: 40px"] {
+    background: radial-gradient(circle at top right, #1a1a2e 0%, #050505 60%);
+    min-height: 100vh;
+    color: white;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 60px 40px !important;
+}
+
+/* 2. Adding a Dynamic Glow (The "Non-Boring" Part) */
+div[style*="padding: 40px"]::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: rgba(147, 51, 234, 0.05); /* Signature Red Glow */
+    filter: blur(120px);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+div[style*="padding: 40px"]::after {
+    content: "";
+    position: absolute;
+    bottom: -5%;
+    left: -5%;
+    width: 300px;
+    height: 300px;
+    background: rgba(147, 51, 234, 0.05); /* Subtle Purple Glow */
+    filter: blur(100px);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 3. Welcome Heading - Massive & Metallic */
+div[style*="padding: 40px"] h1 {
+    font-size: 5rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    text-align: center;
+    margin-bottom: 5px;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(to bottom, #ffffff 40%, #a1a1a1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+/* 4. Subtitle */
+div[style*="padding: 40px"] > p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 50px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 1px;
+}
+
+/* 5. Glassmorphism Table Container */
+table {
+    border: none !important;
+    background: rgba(147, 51, 234, 0.05); /* See-through glass look */
+    backdrop-filter: blur(10px); /* Blurs the background glow through the table */
+    border-radius: 24px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1100px;
+    box-shadow: 0 20px 50px rgba(147, 51, 234, 0.05), 
+                inset 0 0 0 1px rgba(147, 51, 234, 0.05);
+    margin-top: 20px !important;
+    position: relative;
+    z-index: 1;
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+/* 6. Table Header */
+th {
+    padding: 24px !important;
+    color: #8b5cf6; 
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(147, 51, 234, 0.05) !important;
+    background: rgba(147, 51, 234, 0.05);
+}
+
+/* 7. Table Rows */
+td {
+    padding: 20px 24px !important;
+    border-bottom: 1px solid rgba(147, 51, 234, 0.05) !important;
+    color: #e2e8f0;
+    font-size: 1rem;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+tbody tr:hover {
+    background: rgba(147, 51, 234, 0.05);
+    transition: 0.3s;
+}
+
+/* 8. Attendance Pillar */
+td:last-child {
+    font-weight: 700;
+    color: #22c55e; /* Default green for Present */
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    div[style*="padding: 40px"] h1 { font-size: 2.8rem; }
+}
+/* 1. The Main Section Background */
+.reviews-section {
+    padding: 80px 5%;
+    /* This creates the 'Shade' effect - a deep purple/blue center fading to black */
+    background: radial-gradient(circle at center, #1a1a2e 0%, #050505 70%);
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 2. Adding an extra 'Glow Orb' behind the cards for depth */
+.reviews-section::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    /* Soft purple glow to match your IBENTO branding */
+    background: rgba(139, 92, 246, 0.05); 
+    filter: blur(120px);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 3. The Metallic Title (Ensuring it stays on top of the shade) */
+.massive-title {
+    font-size: 5rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    text-align: center;
+    margin-bottom: 5px;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(to bottom, #ffffff 40%, #a1a1a1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+/* 4. The Subtitle */
+.reviews-header .subtitle {
+    position: relative;
+    z-index: 1;
+    color: #94a3b8;
+    margin-bottom: 50px;
+}
+
+/* 5. The Cards (Adding Glassmorphism so the shade peeks through) */
+.review-card {
+    background: rgba(17, 17, 17, 0.8); /* Semi-transparent */
+    backdrop-filter: blur(10px); /* Glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 35px;
+    border-radius: 24px;
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.review-card:hover {
+    transform: translateY(-12px);
+    border-color: #8b5cf6;
+    box-shadow: 0 25px 50px rgba(147, 51, 234, 0.05);
 }

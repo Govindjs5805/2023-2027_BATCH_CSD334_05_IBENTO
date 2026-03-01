@@ -3,6 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "./MyEvents.css"
 
 function MyEvents() {
   const { user } = useAuth();
@@ -31,37 +32,45 @@ function MyEvents() {
   }, [user]);
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>My Events</h2>
+    <div className="my-events-page">
+      <div className="my-events-header">
+        <h1 className="massive-title">My Events</h1>
+        <div className="title-underline"></div>
+        <p className="subtitle">Track your registrations and access tickets</p>
+      </div>
 
-      {registrations.map(reg => (
-        <div key={reg.id} style={{
-          background: "#f5f5f5",
-          padding: "20px",
-          marginBottom: "20px",
-          borderRadius: "10px"
-        }}>
-          <h3>{reg.eventTitle}</h3>
-          <p>Registered on: {reg.registeredAt?.toDate?.().toLocaleDateString?.() || "N/A"}</p>
-          <p>
-            Status: {reg.checkInStatus ? "Checked In" : "Not Checked In"}
-          </p>
+      <div className="my-events-list">
+        {registrations.length === 0 ? (
+          <p className="empty-msg">You haven't registered for any events yet.</p>
+        ) : (
+          registrations.map(reg => (
+            <div key={reg.id} className="my-event-card">
+              <div className="card-info">
+                <h3>{reg.eventTitle}</h3>
+                <p className="reg-date">Registered: {reg.registeredAt?.toDate?.().toLocaleDateString?.() || "N/A"}</p>
+                <p className={`status-text ${reg.checkInStatus ? 'status-green' : 'status-red'}`}>
+                  {reg.checkInStatus ? "● Checked In" : "○ Not Checked In"}
+                </p>
+              </div>
 
-          <button
-            onClick={() => navigate(`/ticket/${reg.id}`)}
-          >
-            View Ticket
-          </button>
-          {new Date(reg.eventDate) < new Date() && (
-  <button 
-    onClick={() => navigate(`/feedback/${reg.eventId}`)}
-    style={{ background: "#8b5cf6", color: "white", padding: "8px 15px", border: "none", borderRadius: "5px", cursor: "pointer" }}
-  >
-    Give Feedback
-  </button>
-)}
-        </div>
-      ))}
+              <div className="card-actions">
+                <button className="ticket-btn" onClick={() => navigate(`/ticket/${reg.id}`)}>
+                  View Ticket
+                </button>
+                
+                {new Date(reg.eventDate) < new Date() && (
+                  <button 
+                    className="feedback-btn"
+                    onClick={() => navigate(`/feedback/${reg.eventId}`)}
+                  >
+                    Give Feedback
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
