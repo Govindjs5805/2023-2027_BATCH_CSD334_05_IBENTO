@@ -10,18 +10,7 @@ function Home() {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
 
-  const forumLogos = [
-    "/FOCES White 1.png", 
-    "/IEDC WhiteSVG 1.png", 
-    "/IEEE-logo-WHITE.png", 
-    "/Mulearn Logo.png",
-    "/tinkerhub.png",
-    "/IEDC WhiteSVG 1.png", 
-    "/FOCES White 1.png", 
-    "/Mulearn Logo.png",
-    "/Group 13.png"
-  ];
-
+  const forumLogos = ["/FOCES White 1.png", "/IEDC WhiteSVG 1.png", "/IEEE-logo-WHITE.png", "/Mulearn Logo.png", "/tinkerhub.png", "/Group 13.png"];
   const forums = [
     { name: "FOCES", img: "/FOCES White 1.png" },
     { name: "IEDC", img: "/IEDC WhiteSVG 1.png" },
@@ -34,41 +23,45 @@ function Home() {
   useEffect(() => {
     const fetchEvents = async () => {
       const snap = await getDocs(collection(db, "events"));
-      const eventList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      eventList.sort((a, b) => new Date(a.date) - new Date(b.date));
-      setEvents(eventList.slice(0, 8));
+      const today = new Date().setHours(0, 0, 0, 0);
+      
+      const eventList = snap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(event => new Date(event.date).getTime() >= today) // Filters past events
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      setEvents(eventList);
     };
     fetchEvents();
   }, []);
 
   return (
     <div className="home-page-layout">
-      {/* Hero section handles its own background, but we wrap it to ensure continuity */}
-      <div className="hero-wrapper">
+      {/* 1. Hero with a blending overflow */}
+      <div className="hero-container-main">
         <Hero />
+        <div className="section-blender"></div> 
       </div>
 
-      <CurvedLoop 
-        logos={forumLogos} 
-        speed={0.05} 
-        curveAmount={0} 
-        logoSize={80} 
-      />
+      <div className="branding-strip">
+        <CurvedLoop logos={forumLogos} speed={0.1} curveAmount={0} logoSize={90} />
+      </div>
 
       <section className="home-section">
-        <h2 className="section-title">Upcoming Events</h2>
+        <h2 className="massive-title">Upcoming Events</h2>
         <div className="events-grid">
           {events.map(event => (
             <div className="event-card" key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
-              <div className="card-image">
-                <img src={event.posterURL || "https://via.placeholder.com/400x600"} alt={event.title} />
-                <div className="event-badge">
-                  {event.date ? new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "TBA"}
+              <div className="card-image-box">
+                <img src={event.posterURL} alt={event.title} />
+                <div className="event-date-pill">
+                  <span className="pill-month">{new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                  <span className="pill-day">{new Date(event.date).getDate()}</span>
                 </div>
               </div>
-              <div className="card-content">
+              <div className="card-info">
                 <h3>{event.title}</h3>
-                <button className="glass-btn-sm">View Details</button>
+                <button className="neon-detail-btn">View Details</button>
               </div>
             </div>
           ))}
@@ -76,11 +69,11 @@ function Home() {
       </section>
 
       <section className="organizers-section">
-        <h2 className="section-title organizers-title">Our Communities</h2>
-        <div className="organizers-grid">
+        <h2 className="massive-title">Our Communities</h2>
+        <div className="organizers-row">
           {forums.map((forum, index) => (
-            <div className="org-card" key={index}>
-              <div className="org-avatar">
+            <div className="community-circle-card" key={index}>
+              <div className="community-avatar">
                 <img src={forum.img} alt={forum.name} />
               </div>
               <h4>{forum.name}</h4>

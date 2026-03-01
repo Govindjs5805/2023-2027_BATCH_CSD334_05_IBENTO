@@ -1,141 +1,153 @@
-/* --- PAGE WRAPPER & COLOR BLENDING --- */
+/* --- GLOBAL BLENDING --- */
 .home-page-layout {
-  background: #000000;
-  min-height: 100vh;
+  background: #000;
+  color: white;
   overflow-x: hidden;
 }
 
-/* --- HEADINGS (High-End Typography) --- */
-.section-title {
-  display: block; 
-  width: 100%;
-  font-size: clamp(2rem, 5vw, 3.5rem); 
-  font-weight: 800;
-  text-align: center;
-  padding: 60px 0 20px;
-  margin: 0;
-  /* Multi-layer gradient for depth */
-  background: linear-gradient(180deg, #FFFFFF 0%, #a78bfa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -1.5px;
+/* Fixes the "Cutting" effect between Hero and Content */
+.hero-container-main {
+  position: relative;
+  z-index: 10;
 }
 
-/* --- EVENT CARDS SECTION --- */
+.section-blender {
+  position: absolute;
+  bottom: -100px;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent, #000);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* --- HEADINGS (Massive & High Contrast) --- */
+.massive-title {
+  display: block;
+  font-size: clamp(2rem, 10vw, 4rem) !important; /* Forces it to be huge */
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: -3px;
+  margin: 80px 0 40px;
+  background: linear-gradient(180deg, #fff 0%, rgba(167, 139, 250, 0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 0.9;
+  border: none !important; /* Removes the black line glitch */
+}
+
+/* --- EVENT SECTION --- */
 .home-section {
-  max-width: 100vw;
-  /* Ensuring background is never white/grey */
-  background: radial-gradient(circle at center, #0a051a 0%, #000000 100%);
-  padding: 40px 5%;
+  padding: 30px 5%;
+  background: radial-gradient(circle at bottom, #0e0725 0%, #07010f 70%);
   position: relative;
+  z-index: 11;
 }
 
 .events-grid {
   display: flex;
-  flex-direction: row;
   overflow-x: auto;
-  gap: 24px;
-  padding: 20px 0 60px;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  gap: 30px;
+  padding: 20px 0 0px;
 }
-
 .events-grid::-webkit-scrollbar { display: none; }
 
 .event-card {
-  flex: 0 0 340px;
-  scroll-snap-align: center;
-  background: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 28px;
-  padding: 12px;
-  transition: all 0.5s ease;
+  flex: 0 0 380px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 10px;
+  transition: 0.4s ease;
+  cursor: pointer;
 }
 
 .event-card:hover {
-  transform: translateY(-12px);
-  border-color: #8b5cf6;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+  transform: translateY(-15px);
+  background: rgba(167, 139, 250, 0.08);
+  border-color: #a78bfa;
 }
 
-.card-image {
-  height: 220px;
-  border-radius: 20px;
+.card-image-box {
+  height: 260px;
+  border-radius: 28px;
   overflow: hidden;
-  margin-bottom: 15px;
+  position: relative;
+  margin-bottom: 10px;
 }
 
-/* --- OUR COMMUNITIES (One-Line Round Style) --- */
-.organizers-section {
-  padding: 40px 5% 100px;
-  background: #000000;
+.card-image-box img { width: 100%; height: 100%; object-fit: cover; }
+
+/* THE DATE PILL */
+.event-date-pill {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #fff;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 18px;
   text-align: center;
-}
-
-.organizers-grid {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  overflow-x: auto; /* Allows scrolling on mobile */
-  white-space: nowrap; /* Forces one line */
-  padding: 40px 20px;
-}
-
-/* Hide scrollbar for communities line */
-.organizers-grid::-webkit-scrollbar { display: none; }
-
-.org-card {
-  flex: 0 0 auto; /* Prevents shrinking */
+  font-weight: 900;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.org-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%; /* Perfect Circle */
-  background: rgba(255, 255, 255, 0.03);
+.pill-month { font-size: 0.7rem; color: #8b5cf6; text-transform: uppercase; }
+.pill-day { font-size: 1.3rem; line-height: 1; }
+
+.card-info h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 20px; color: black;}
+
+/* NEW BUTTON STYLE */
+.neon-detail-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: #a78bfa;
+  color: #000;
+  border: none;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(167, 139, 250, 0.3);
+}
+
+/* --- COMMUNITIES (Single Line Round) --- */
+.organizers-section { padding: 80px 5%;   
+  background: radial-gradient(circle at top, #0e0725 0%, #07010f 70%);
+ }
+
+.organizers-row {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 40px;
+}
+
+.community-circle-card { display: flex; flex-direction: column; align-items: center; }
+
+.community-avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 25px;
+  transition: 0.5s;
 }
 
-.org-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: grayscale(1) brightness(0.8);
-  transition: 0.4s;
-}
+.community-avatar img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1); }
 
-.org-card h4 {
-  margin-top: 15px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Hover effect like the NFT marketplace circle avatars */
-.org-card:hover .org-avatar {
+.community-circle-card:hover .community-avatar {
   background: #fff;
-  transform: scale(1.1);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  transform: translateY(-10px);
+  box-shadow: 0 0 40px rgba(167, 139, 250, 0.5);
 }
+.community-circle-card:hover img { filter: grayscale(0) brightness(0); }
 
-.org-card:hover img {
-  filter: grayscale(0) brightness(0); /* High contrast black logo on white circle */
-}
-
-.org-card:hover h4 {
-  color: #fff;
-}
+.community-circle-card h4 { margin-top: 15px; color: #64748b; font-weight: 700; }
