@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import Hero from "../components/Home/Hero";
 import CurvedLoop from "./CurvedLoop"; 
+import Footer from "../components/Footer/Footer"; // [Importing the Footer]
 import "./Home.css"; 
 
 function Home() {
@@ -28,7 +29,7 @@ function Home() {
       
       const eventList = snap.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(event => new Date(event.date).getTime() >= today) // Filters past events
+        .filter(event => new Date(event.date).getTime() >= today)
         .sort((a, b) => new Date(a.date) - new Date(b.date));
 
       setEvents(eventList);
@@ -38,16 +39,18 @@ function Home() {
 
   return (
     <div className="home-page-layout">
-      {/* 1. Hero with a blending overflow */}
+      {/* 1. Hero Section */}
       <div className="hero-container-main">
         <Hero />
         <div className="section-blender"></div> 
       </div>
 
+      {/* 2. Logo Branding Strip */}
       <div className="branding-strip">
         <CurvedLoop logos={forumLogos} speed={0.05} curveAmount={0} logoSize={90} />
       </div>
 
+      {/* 3. Events Section */}
       <section className="home-section">
         <h2 className="massive-title">Upcoming Events</h2>
         <div className="events-grid">
@@ -69,6 +72,7 @@ function Home() {
         </div>
       </section>
 
+      {/* 4. Communities Section */}
       <section className="organizers-section">
         <h2 className="massive-title">Our Communities</h2>
         <div className="organizers-row">
@@ -82,6 +86,9 @@ function Home() {
           ))}
         </div>
       </section>
+
+      {/* 5. Footer Section */}
+      <Footer />
     </div>
   );
 }

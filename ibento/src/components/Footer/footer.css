@@ -1,6 +1,7 @@
 .main-footer {
   background: #000;
   color: #fff;
+  z-index: 99;
   padding: 80px 5% 40px;
   font-family: 'Inter', sans-serif;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
