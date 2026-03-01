@@ -25,28 +25,28 @@ const AdminLayout = ({ children }) => {
 
         <nav className="sidebar-nav">
           <NavLink to="/admin" end className={({ isActive }) => isActive ? "active" : ""}>
-            📊 Dashboard
+            Dashboard
           </NavLink>
           <NavLink to="/admin/create-event" className={({ isActive }) => isActive ? "active" : ""}>
-            ➕ Create Event
+            Create Event
           </NavLink>
           <NavLink to="/admin/registrations" className={({ isActive }) => isActive ? "active" : ""}>
-            👥 Registrations
+             Registrations
           </NavLink>
           <NavLink to="/admin/checkin" className={({ isActive }) => isActive ? "active" : ""}>
-            ✅ Check-In
+             Check-In
           </NavLink>
           <NavLink to="/admin/documents" className={({ isActive }) => isActive ? "active" : ""}>
-            📁 Documents
+             Documents
           </NavLink>
           <NavLink to="/admin/feedbacks" className={({ isActive }) => isActive ? "active" : ""}>
-            💬 Feedbacks
+             Feedbacks
           </NavLink>
           <NavLink to="/admin/report" className={({ isActive }) => isActive ? "active" : ""}>
-            📄 Reports
+             Reports
           </NavLink>
           <NavLink to="/admin/analytics" className={({ isActive }) => isActive ? "active" : ""}>
-            📈 Analytics
+             Analytics
           </NavLink>
         </nav>
       </aside>

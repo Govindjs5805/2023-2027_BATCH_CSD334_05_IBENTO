@@ -67,7 +67,7 @@
 .sidebar-nav a {
   padding: 14px 25px;
   text-decoration: none;
-  color: #8b5cf6;
+  color: #000000;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -81,7 +81,7 @@
 }
 
 .sidebar-nav a.active {
-  background: #e8f5e9;
+  background: #ced7db;
   color: #8b5cf6;
   border-right: 4px solid #8b5cf6;
 }
