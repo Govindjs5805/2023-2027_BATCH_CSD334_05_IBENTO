@@ -17,7 +17,8 @@ function Home() {
     { name: "IEEE", img: "/IEEE-logo-WHITE.png" },
     { name: "μLearn", img: "/Mulearn Logo.png" },
     { name: "TinkerHub", img: "/tinkerhub.png" },
-    { name: "PRODDEC", img: "/Group 13.png" }
+    { name: "PRODDEC", img: "/Group 13.png" },
+    { name: "gdg", img: "/gdg.png" }
   ];
 
   useEffect(() => {
